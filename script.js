@@ -1,75 +1,123 @@
-// Navigasi
-window.addEventListener('scroll', () => {
-    const nav = document.getElementById('navbar');
-    if (nav) { 
-        if (window.scrollY > 50) {
-            nav.style.padding = '0.8rem 8%';
-            nav.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
-        } else {
-            nav.style.padding = '1.5rem 8%';
-            nav.style.boxShadow = 'none';
-        }
-    }
-});
-
-const menuBtn = document.getElementById('mobile-menu');
-const navLinks = document.getElementById('nav-list');
-if (menuBtn && navLinks) {
-    menuBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('active-nav');
-    });
-}
-
-// Daftar & Masuk
 document.addEventListener('DOMContentLoaded', () => {
     
-    //Daftar
-    const formDaftar = document.getElementById('form-registrasi');
-    if (formDaftar) {
-        formDaftar.onsubmit = function(e) {
-            e.preventDefault();
-            
-            const nama = formDaftar.querySelector('input[type="text"]').value;
-            const email = formDaftar.querySelector('input[type="email"]').value;
-            const passInput = document.getElementById('pass-daftar');
+    /* NAVIGASI & RESPONSIVE */
+    const nav = document.getElementById('navbar');
+    const menuBtn = document.getElementById('mobile-menu');
+    const navContainer = document.getElementById('nav-container');
 
-            if (passInput.value.length < 8) {
-                alert("⚠️ Password minimal 8 karakter!");
-                return false;
-            }
+    window.addEventListener('scroll', () => {
+        if (nav && window.scrollY > 50) {
+            nav.style.padding = '0.8rem 8%';
+            nav.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+        } else if (nav) {
+            nav.style.padding = '1.2rem 8%';
+            nav.style.boxShadow = 'none';
+        }
+    });
 
-            const dataUser = { nama, email, password: passInput.value };
-            localStorage.setItem('userPickFit', JSON.stringify(dataUser));
-
-            alert("Daftar Berhasil! Sekarang silakan masuk.");
-            window.location.href = "masuk.html"; 
-            return false;
-        };
+    if (menuBtn && navContainer) {
+        menuBtn.addEventListener('click', () => {
+            navContainer.classList.toggle('active-nav');
+            menuBtn.textContent = navContainer.classList.contains('active-nav') ? '✕' : '☰';
+        });
     }
 
-    //Masuk
-    const formMasuk = document.getElementById('form-login');
-    if (formMasuk) {
-        formMasuk.onsubmit = function(e) {
-            e.preventDefault();
-            
-            const emailIn = formMasuk.querySelector('input[type="email"]').value;
-            const passIn = formMasuk.querySelector('input[type="password"]').value;
+    /* FITUR LEMARI */
+    const gridLemari = document.getElementById('grid-lemari');
+    const btnTambah = document.getElementById('btn-tambah');
 
-            if (passIn.length < 8) {
-                alert("⚠️ Password minimal 8 karakter!");
-                return false;
-            }
+    function tampilkanLemari() {
+        if (!gridLemari) return;
+        gridLemari.innerHTML = "";
+        const koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
 
-            const storedUser = JSON.parse(localStorage.getItem('userPickFit'));
+        if (koleksi.length === 0) {
+            gridLemari.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>Lemarimu kosong nih!</p>";
+            return;
+        }
 
-            if (storedUser && emailIn === storedUser.email && passIn === storedUser.password) {
-                alert("Login Berhasil! Selamat datang.");
-                window.location.href = "index.html";
-            } else {
-                alert("Email atau password salah / belum daftar!");
-            }
-            return false;
-        };
+        koleksi.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = "wardrobe-item";
+            card.innerHTML = `
+                <img src="${item.foto}" alt="${item.nama}">
+                <p>${item.nama}</p>
+                <button class="btn-delete" onclick="hapusBaju(${index})">Remove</button>
+            `;
+            gridLemari.appendChild(card);
+        });
     }
+
+    if (btnTambah) {
+        btnTambah.addEventListener('click', async () => {
+            const nama = document.getElementById('nama-baju').value;
+            const fileInput = document.getElementById('foto-baju');
+            const apiKey = "XN53EsNF4LQT3TzJdM6qNCFx";
+
+            if (!nama || fileInput.files.length === 0) {
+                alert("Isi nama dan foto");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("image_file", fileInput.files[0]);
+            formData.append("size", "auto");
+
+            alert("AI lagi kerja, tunggu sebentar...");
+
+            try {
+                const response = await fetch("https://api.remove.bg/v1.0/removebg", {
+                    method: "POST",
+                    headers: { "X-Api-Key": apiKey },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
+                        koleksi.push({ nama, foto: reader.result });
+                        localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
+                        tampilkanLemari();
+                        alert("Baju berhasil ditambah!");
+                    };
+                    reader.readAsDataURL(blob);
+                } else {
+                    alert("Gagal hapus background. Cek API Key!");
+                }
+            } catch (err) {
+                alert("Error koneksi!");
+            }
+        });
+    }
+
+    /* FITUR DAFTAR & MASUK */
+    const formRegistrasi = document.getElementById('form-registrasi');
+    if (formRegistrasi) {
+        formRegistrasi.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nama = formRegistrasi.querySelector('input[type="text"]').value;
+            alert(`Halo ${nama}, pendaftaran berhasil!`);
+            window.location.href = "masuk.html";
+        });
+    }
+
+    const formLogin = document.getElementById('form-login');
+    if (formLogin) {
+        formLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Login Berhasil! Selamat datang.");
+            window.location.href = "index.html";
+        });
+    }
+
+    tampilkanLemari();
 });
+
+window.hapusBaju = function(index) {
+    let koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
+    koleksi.splice(index, 1);
+    localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
+    location.reload();
+}

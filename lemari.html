@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lemari Saya - PickFit</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav id="navbar">
+        <a href="index.html" class="logo">Pick<span>Fit</span></a>
+        
+        <div class="nav-container" id="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="lemari.html" class="active">Lemari</a></li>
+                <li><a href="#" id="logout-btn">Logout</a></li>
+            </ul>
+        </div>
+        <button class="menu-toggle" id="mobile-menu">☰</button>
+    </nav>
+
+    <div class="container" style="margin-top: 120px;">
+        <h2 class="section-title">Your <span style="color:var(--orange-accent)">Virtual Wardrobe</span></h2>
+
+        <div style="background: var(--neutral); padding: 30px; border-radius: 10px; margin-bottom: 40px; text-align: center;">
+            <h3 style="margin-bottom: 20px;">Tambah Koleksi</h3>
+            <input type="text" id="nama-baju" placeholder="Nama Baju..." style="padding: 10px; width: 250px; border: 1px solid #ddd;">
+            <input type="file" id="foto-baju" accept="image/*" style="margin: 10px;">
+            <button id="btn-tambah" class="btn-signin">Simpan</button>
+        </div>
+
+        <div id="grid-lemari">
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

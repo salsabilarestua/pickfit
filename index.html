@@ -3,36 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PICKFIT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibe&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>PICKFIT - Your Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <nav id="navbar">
-        <div class="logo">Pick<span>Fit</span></div>
-        <button class="menu-toggle" id="mobile-menu">☰</button>
-        <ul class="nav-links" id="nav-list">
-            <li><a href="#" class="active">Beranda</a></li>
-            <li><a href="#">Lemari</a></li>
-            <li><a href="#">Mix & Match</a></li>
-            <li><a href="#">Planner</a></li>
-        </ul>
+        <a href="index.html" class="logo">Pick<span>Fit</span></a>
+        
+        <div class="nav-container" id="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Beranda</a></li>
+                <li><a href="lemari.html">Lemari</a></li>
+                <li><a href="#">Mix & Match</a></li>
+                <li><a href="#">Planner</a></li>
+            </ul>
 
-        <div class="auth-buttons">
-            <a href="masuk.html" class="btn-login">Masuk</a>
-            <a href="daftar.html" class="btn-signin">Daftar</a>
+            <div class="auth-buttons">
+                <a href="masuk.html" class="btn-link">Masuk</a>
+                <a href="daftar.html" class="btn-black">DAFTAR</a>
+            </div>
         </div>
+
+        <button class="menu-toggle" id="mobile-menu">☰</button>
     </nav>
 
-    <header class="hero">
+    <header class="hero">       
         <div class="hero-content">
-            <p class="signature">Style by You</p>
-            <h1>Tentukan Gaya Terbaikmu</h1>
-            <p class="subtitle">PICK YOUR OUTFIT EASILY</p>
-            <div class="hero-btns">
-                <button class="btn btn-nude" id="btn-start">Mulai Sekarang</button>
-            </div>
+            <span class="signature-hero">Style by You</span> <h1>Tentukan Gaya Terbaikmu</h1>
+            <p>PICK YOUR OUTFIT EASILY</p>
+            <button class="btn-nude">MULAI SEKARANG</button>
         </div>
     </header>
 
@@ -40,12 +41,12 @@
         <h2 class="section-title">Kategori OOTD</h2>
         <div class="category-grid">
             
-            <div class="category-item" data-name="Formal">
+            <div class="category-item">
                 <img src="formal.jpg" alt="Formal">
                 <div class="overlay"><h3>Acara Formal</h3></div>
             </div>
 
-            <div class="category-item item-large" data-name="Utama">
+            <div class="category-item item-large">
                 <img src="secc.avif" alt="Main">
                 <div class="overlay-center">
                     <p class="signature-light">Inspirasi</p>
@@ -54,25 +55,26 @@
                 </div>
             </div>
 
-            <div class="category-item" data-name="Casual">
+            <div class="category-item">
                 <img src="casual.avif" alt="Harian">
                 <div class="overlay"><h3>Gaya Harian</h3></div>
             </div>
 
-            <div class="category-item" data-name="Wedding">
+            <div class="category-item">
                 <img src="wedding.jpg" alt="Wedding">
-                <div class="overlay align-right"><h3>Wedding Invite</h3></div>
+                <div class="overlay"><h3>Wedding Invite</h3></div>
             </div>
 
-            <div class="category-item" data-name="Date">
+            <div class="category-item">
                 <img src="date.jpg" alt="Date">
-                <div class="overlay"><h3>Date</h3></div>
+                <div class="overlay"><h3>Date Night</h3></div>
             </div>
+            
         </div>
     </section>
 
     <footer>
-        <p class="signature-footer">PickFit</p>
+        <div class="footer-logo">Pick<span>Fit</span></div>
         <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
     </footer>
 
