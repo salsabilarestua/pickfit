@@ -1,0 +1,162 @@
+/* PALLETE WARNA */
+:root {
+    --grey-dark: #1a1a1a;
+    --red-nude: #e8b4a0;     /* Red Normal */
+    --orange-accent: #c97c5d; /* Accent Orange */
+    --bg-white: #fefefe;
+    --neutral: #f7f3f0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-white);
+    color: var(--grey-dark);
+    overflow-x: hidden;
+}
+
+/* TYPOGRAPHY */
+h1, h2, .logo, .cat-brand { font-family: 'Playfair Display', serif; }
+.signature, .signature-light, .signature-footer { font-family: 'Great Vibes', cursive; }
+
+/* NAVBAR */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 8%;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: 0.4s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.nav-container { display: flex; align-items: center; gap: 3rem; }
+
+.logo { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; }
+.logo span { color: var(--orange-accent); }
+
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+    text-decoration: none;
+    color: var(--grey-dark);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover, .nav-links a.active { color: var(--orange-accent); }
+
+/* MASUK & DAFTAR*/
+.auth-buttons { display: flex; gap: 1.5rem; align-items: center; }
+
+.btn-login {
+    text-decoration: none;
+    color: var(--grey-dark);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.btn-signin {
+    text-decoration: none;
+    background-color: var(--grey-dark);
+    color: white;
+    padding: 10px 25px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+}
+
+.btn-signin:hover { background-color: var(--orange-accent); }
+
+/* HOME */
+.hero {
+    height: 80vh;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('home.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.signature { font-size: 2.5rem; color: var(--red-nude); margin-bottom: -10px; }
+.hero h1 { font-size: clamp(2rem, 6vw, 4rem); margin: 10px 0; }
+.subtitle { letter-spacing: 5px; font-size: 0.7rem; opacity: 0.9; }
+
+.btn-nude {
+    margin-top: 2rem;
+    padding: 15px 40px;
+    background: var(--red-nude);
+    color: white;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-nude:hover { background: var(--orange-accent); transform: translateY(-3px); }
+
+/* CATEGORY GRID */
+.container { padding: 5rem 8%; }
+.section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+
+.category-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.category-item { position: relative; height: 300px; overflow: hidden; }
+.category-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+.category-item:hover img { transform: scale(1.1); }
+
+.overlay, .overlay-center {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 30px;
+    color: white;
+}
+
+.overlay-center { justify-content: center; align-items: center; background: rgba(0,0,0,0.4); }
+.cat-brand { font-size: 3rem; letter-spacing: 8px; margin: 10px 0; }
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 8px 20px;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (min-width: 768px) { .category-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) {
+    .category-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 350px); }
+    .item-large { grid-row: span 2; }
+}
+
+@media (max-width: 1023px) {
+    .nav-container { display: none; } 
+    .menu-toggle { display: block; background: none; border: none; font-size: 1.8rem; cursor: pointer; }
+}
+
+footer { padding: 4rem; background: var(--neutral); text-align: center; border-top: 1px solid #eee; }
+.signature-footer { font-size: 2rem; color: var(--orange-accent); margin-bottom: 5px; }

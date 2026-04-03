@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PICKFIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibe&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="logo">Pick<span>Fit</span></div>
+        <button class="menu-toggle" id="mobile-menu">☰</button>
+        <ul class="nav-links" id="nav-list">
+            <li><a href="#" class="active">Beranda</a></li>
+            <li><a href="#">Lemari</a></li>
+            <li><a href="#">Mix & Match</a></li>
+            <li><a href="#">Planner</a></li>
+        </ul>
+
+        <div class="auth-buttons">
+            <a href="#" class="btn-login">Masuk</a>
+            <a href="#" class="btn-signin">Daftar</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <p class="signature">Style by You</p>
+            <h1>Tentukan Gaya Terbaikmu</h1>
+            <p class="subtitle">PICK YOUR OUTFIT EASILY</p>
+            <div class="hero-btns">
+                <button class="btn btn-nude" id="btn-start">Mulai Sekarang</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="container">
+        <h2 class="section-title">Kategori OOTD</h2>
+        <div class="category-grid">
+            
+            <div class="category-item" data-name="Formal">
+                <img src="formal.jpg" alt="Formal">
+                <div class="overlay"><h3>Acara Formal</h3></div>
+            </div>
+
+            <div class="category-item item-large" data-name="Utama">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=500" alt="Main">
+                <div class="overlay-center">
+                    <p class="signature-light">Inspirasi</p>
+                    <h2 class="cat-brand">PICKFIT</h2>
+                    <button class="btn-outline">Lihat Semua</button>
+                </div>
+            </div>
+
+            <div class="category-item" data-name="Casual">
+                <img src="casual.avif" alt="Harian">
+                <div class="overlay"><h3>Gaya Harian</h3></div>
+            </div>
+
+            <div class="category-item" data-name="Wedding">
+                <img src="wedding.jpg" alt="Wedding">
+                <div class="overlay align-right"><h3>Wedding Invite</h3></div>
+            </div>
+
+            <div class="category-item" data-name="Date">
+                <img src="date.jpg" alt="Date">
+                <div class="overlay"><h3>Date</h3></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="signature-footer">PickFit</p>
+        <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
