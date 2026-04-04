@@ -103,14 +103,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const formLogin = document.getElementById('form-login');
-    if (formLogin) {
-        formLogin.addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert("Login Berhasil! Selamat datang.");
-            window.location.href = "index.html";
-        });
-    }
+const formLogin = document.getElementById('form-login');
+if (formLogin) {
+    formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = formLogin.querySelector('input[type="email"]');
+        const passwordInput = formLogin.querySelector('input[type="password"]');
+
+        if (emailInput.value && passwordInput.value) {
+            const username = emailInput.value.split('@')[0];
+            localStorage.setItem('activeUser', username);
+
+            alert("Login Berhasil! Selamat datang, " + username);
+            window.location.href = "index.html"; 
+        } else {
+            alert("Harap isi email dan password!");
+        }
+    });
+}
 
     tampilkanLemari();
 });
@@ -120,4 +130,51 @@ window.hapusBaju = function(index) {
     koleksi.splice(index, 1);
     localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
     location.reload();
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+    const savedUsername = localStorage.getItem('activeUser');
+    const displayUsername = document.getElementById('display-username');
+    const guestMenu = document.getElementById('guest-menu');
+    const userMenu = document.getElementById('user-menu');
+
+    if (savedUsername) {
+        if(guestMenu) guestMenu.style.display = 'none';
+        if(userMenu) userMenu.style.display = 'block';
+    } else {
+        if(guestMenu) guestMenu.style.display = 'block';
+        if(userMenu) userMenu.style.display = 'none';
+    }
+
+    if (displayUsername) { 
+        if (savedUsername) {
+            displayUsername.textContent = savedUsername;
+            const welcomeMsg = document.getElementById('welcome-msg');
+            if(welcomeMsg) welcomeMsg.textContent = "Halo, " + savedUsername + "!";
+        } else {
+            alert("Silakan masuk terlebih dahulu!");
+            window.location.href = "masuk.html"; 
+        }
+    }
+
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function() {
+            localStorage.removeItem('activeUser');
+            window.location.href = "index.html";
+        });
+    }
+});
+
+//Keluar Akun
+const tombolKeluar = document.getElementById('logout-btn');
+
+if (tombolKeluar) {
+    tombolKeluar.addEventListener('click', function() {
+        localStorage.removeItem('activeUser');
+
+        alert("Kamu telah keluar. Sampai jumpa lagi!");
+
+        window.location.href = "index.html"; 
+    });
 }

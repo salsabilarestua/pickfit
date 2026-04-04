@@ -326,3 +326,101 @@ footer {
 .footer-logo { font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; color: var(--grey-dark); }
 .footer-logo span { color: var(--orange-accent); }
 footer p { font-size: 0.9rem; color: #777; font-family: 'Poppins', sans-serif; }
+
+/* HALAMAN PROFIL*/
+.profile-wrapper {
+    padding: 10rem 8% 5rem 8%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fcf9f7;
+}
+
+.profile-card {
+    background: white;
+    width: 100%;
+    max-width: 850px;
+    display: flex;
+    align-items: center;
+    padding: 60px;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.03);
+}
+
+.profile-left {
+    flex: 1;
+    text-align: center;
+    border-right: 1px solid #eee;
+    padding-right: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-right {
+    flex: 1;
+    padding-left: 50px;
+}
+
+.profile-right h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.profile-info-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #bbb;
+    margin-bottom: 8px;
+}
+
+.profile-info-group p {
+    font-size: 1.8rem;
+    color: #000;
+    font-weight: 700;
+    margin: 0;
+}
+
+.btn-logout {
+    margin-top: 25px;
+    background: transparent;
+    color: #ff4d4d;
+    border: 1px solid #ff4d4d;
+    padding: 10px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-logout:hover {
+    background: #ff4d4d;
+    color: white;
+}
+
+/* Responsif */
+@media (max-width: 768px) {
+    .profile-card { 
+        flex-direction: column; 
+        padding: 40px 20px; 
+    }
+    .profile-left { 
+        border-right: none; 
+        border-bottom: 1px solid #eee; 
+        padding-right: 0; 
+        padding-bottom: 30px; 
+        margin-bottom: 30px;
+        width: 100%;
+    }
+    .profile-right {
+        padding-left: 0;
+        text-align: center;
+        width: 100%;
+    }
+}
