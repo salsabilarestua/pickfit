@@ -3,36 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lemari Saya - PickFit</title>
+    <title>Lemari Saya - PICKFIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <nav id="navbar">
         <a href="index.html" class="logo">Pick<span>Fit</span></a>
-        
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <div class="nav-container" id="nav-container">
             <ul class="nav-links">
                 <li><a href="index.html">Beranda</a></li>
                 <li><a href="lemari.html" class="active">Lemari</a></li>
+                <li><a href="mixmatch.html">Mix & Match</a></li>
+                <li><a href="#">Planner</a></li>
             </ul>
-        </div>
-        <button class="menu-toggle" id="mobile-menu">☰</button>
     </nav>
 
-    <div class="container" style="margin-top: 120px;">
-        <h2 class="section-title">Your <span style="color:var(--orange-accent)">Virtual Wardrobe</span></h2>
-
-        <div style="background: var(--neutral); padding: 30px; border-radius: 10px; margin-bottom: 40px; text-align: center;">
-            <h3 style="margin-bottom: 20px;">Tambah Koleksi</h3>
-            <input type="text" id="nama-baju" placeholder="Nama Baju..." style="padding: 10px; width: 250px; border: 1px solid #ddd;">
-            <input type="file" id="foto-baju" accept="image/*" style="margin: 10px;">
-            <button id="btn-tambah" class="btn-signin">Simpan</button>
+    <section class="container" style="margin-top: 50px;">
+        <h2 class="section-title">Lemari Saya</h2>
+        
+        <div class="auth-card" style="margin: 0 auto 50px auto; max-width: 500px;">
+            <h3>Tambah Koleksi Baru</h3>
+            <input type="text" id="nama-baju" placeholder="Nama Baju (ex: Kaos Hitam)">
+            <input type="file" id="foto-baju" accept="image/*" style="padding: 10px 0;">
+            <button id="btn-tambah" class="btn-black" style="width: 100%; margin-top: 10px;">UNGGAH KE LEMARI</button>
         </div>
 
         <div id="grid-lemari">
             </div>
-    </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">Pick<span>Fit</span></div>
+        <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>

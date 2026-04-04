@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const koleksi = JSON.parse(localStorage.getItem("lemariPickFit")) || [];
 
-    // tampilkan item lemari
     koleksi.forEach((item) => {
         const div = document.createElement("div");
         div.className = "item";
@@ -18,12 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
         lemariList.appendChild(div);
     });
 
-    // WAJIB
     canvas.addEventListener("dragover", (e) => {
         e.preventDefault();
     });
 
-    // DROP
     canvas.addEventListener("drop", (e) => {
     e.preventDefault();
 
@@ -46,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let angle = 0;
     let scale = 1;
 
-    // ================= DRAG =================
     img.addEventListener("mousedown", (e) => {
         if (e.button === 2) {
             isRotating = true;
@@ -75,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
         isRotating = false;
     });
 
-    // ================= RESIZE (SCROLL) =================
     img.addEventListener("wheel", (e) => {
         e.preventDefault();
 
@@ -88,8 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         img.style.transform = `rotate(${angle}deg) scale(${scale})`;
     });
 
-    // disable klik kanan menu
 img.addEventListener("contextmenu", (e) => e.preventDefault());
-    }); // tutup drop
+    });
 
-}); // ⬅️ INI YANG KURANG (DOMContentLoaded)
+}); 

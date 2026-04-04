@@ -7,27 +7,33 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="profile-page">
 
-    <nav>
+    <nav id="navbar">
         <a href="index.html" class="logo">PICK<span>FIT</span></a>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-        </ul>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
     </nav>
 
     <main class="profile-wrapper">
         <div class="profile-card">
             <div class="profile-left">
                 <div class="profile-img-container">
+                    <div class="gender-anim">
+                        <span>👦</span>
+                        <span>👧</span>
+                    </div>
                 </div>
-                <span class="signature-hero" id="welcome-msg" style="color: var(--orange-accent); font-size: 2rem;">Halo!</span>
+                <h3 class="signature-hero"> <span id="welcome-msg">...</span>!</h3>
                 <button class="btn-logout" id="logout-btn">Keluar Akun</button>
             </div>
 
             <div class="profile-right">
                 <h2>Informasi Profil</h2>
-                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                <hr class="divider">
                 
                 <div class="profile-info-group">
                     <label>Nama Pengguna</label>
