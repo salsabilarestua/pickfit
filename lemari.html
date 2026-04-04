@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lemari Saya - PICKFIT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lemari.css">
 </head>
 <body>
 
@@ -31,10 +31,15 @@
         <div class="auth-card" style="margin: 0 auto 50px auto; max-width: 500px;">
             <h3>Tambah Koleksi Baru</h3>
             <input type="text" id="nama-baju" placeholder="Nama Baju (ex: Kaos Hitam)">
+    
+            <select id="status-baju" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px;">
+            <option value="Siap Pakai">Siap Pakai</option>
+            <option value="Dicuci">Sedang Dicuci</option>
+            </select>
+
             <input type="file" id="foto-baju" accept="image/*" style="padding: 10px 0;">
             <button id="btn-tambah" class="btn-black" style="width: 100%; margin-top: 10px;">UNGGAH KE LEMARI</button>
         </div>
-
         <div id="grid-lemari">
             </div>
     </section>
@@ -44,6 +49,6 @@
         <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="lemari.js"></script>
 </body>
 </html>

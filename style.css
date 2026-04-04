@@ -417,100 +417,208 @@ html, body {
     font-weight: 600;
 }
 
-/* FITUR LEMARI */
-.wardrobe-item {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-}
-
-.wardrobe-item img {
-    width: 100%;          
-    height: 200px;       
-    object-fit: contain;  
-    background: #f9f9f9;   
-    border-radius: 8px;
-}
-
-.item-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    margin-top: 10px;
-    width: 100%;
-}
-
-.status-badge {
-    padding: 6px 15px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-transform: uppercase;
-    border: 1px solid transparent;
-    transition: 0.3s;
-    display: inline-block;
-}
-
-.status-siap { background: #e8f5e9; color: #2e7d32; border-color: #a5d6a7; }
-.status-cuci { background: #ffebee; color: #c62828; border-color: #ef9a9a; }
-.status-jemur { background: #fff3e0; color: #ef6c00; border-color: #ffcc80; }
-
-#grid-lemari {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ukuran kartu baju */
-    gap: 20px;
-    padding: 20px;
-}
-
-.btn-delete {
-    background: none;
-    border: none;
-    color: #888;
-    font-size: 0.7rem;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-    transition: 0.2s;
-}
-
-.btn-delete:hover {
-    color: #c62828;
-}
-
-.nav-container a.active {
-    color: #a0785d;
-    font-weight: 700;
-    border-bottom: 2px solid #a0785d;
-}
-
-.nav-container a:hover {
-    color: #a0785d;
-    transition: 0.3s;
-}
-
 /* FITUR MIX & MATCH */
 .mix-container {
     display: flex;
+    align-items: stretch;
     gap: 20px;
     padding: 120px 5% 50px;
-    min-height: 100vh;
+    min-height: 80vh;
+}
+
+.lemari-list, 
+.canvas-area, 
+.action-area, 
+.saved-outfits-container {
+    height: 600px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.lemari-list {
+    width: 250px;
+    height: 600px;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.lemari-list h3 {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+}
+
+.lemari-list img {
+    width: 100% !important;
+    height: 120px !important; 
+    object-fit: contain !important; 
+    margin-bottom: 15px;
+    cursor: grab;
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 10px;
+    border: 1px solid #eee;
 }
 
 .canvas-area {
-    width: 70%;
+    flex-grow: 1; 
     height: 600px; 
-    border: 2px dashed #d1d1d1;
-    border-radius: 20px;
+    border: 2px dashed var(--orange-accent);
+    border-radius: 25px;
     position: relative;
     background: #fff;
     overflow: hidden;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+}
+
+.canvas-area img {
+    width: 160px !important; 
+    height: auto !important;
+}
+
+.action-area {
+    width: 150px; 
+    background: #1a1a1a; 
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.action-area:hover {
+    background: #333;
+}
+
+.btn-save {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.btn-save:hover {
+    background: var(--orange-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(201, 163, 141, 0.3);
+}
+
+.saved-outfits-container {
+    flex: 1; 
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.outfits-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.outfit-card {
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 10px;
+    text-align: center;
+}
+
+.outfit-preview {
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.outfit-preview img {
+    width: 40px; 
+    position: absolute;
+    transform: scale(0.8);
+}
+
+.dropped-item {
+    position: absolute;
+    cursor: move;
+    transition: outline 0.2s;
+    object-fit: contain;
+}
+
+.dropped-item:active {
+    outline: 2px dashed var(--orange-accent);
+}
+
+.btn-delete-outfit {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.btn-delete-outfit:hover {
+    background: #cc0000;
+}
+
+.item-wrapper {
+    background: #f9f9f9;
+    border-radius: 15px;
+    padding: 10px;
+    border: 1px solid #eee;
+    text-align: center;
+    cursor: grab;
+    transition: 0.3s;
+}
+
+.item-wrapper:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.item-wrapper img {
+    width: 100% !important;
+    height: 100px !important;
+    object-fit: contain !important;
+    margin-bottom: 8px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 0.7rem;
+    border-radius: 10px;
+    background: #e2e2e2;
+    color: #666;
+    font-weight: 600;
+}
+
+.status-tersedia { 
+    background: #d4edda !important; 
+    color: #155724 !important; 
+}
+
+.status-cuci { 
+    background: #f8d7da !important; 
+    color: #721c24 !important; 
 }
 
 /* FITUR PROFILE */
@@ -542,7 +650,6 @@ html, body {
     overflow: hidden;
 }
 
-/* --- ANIMASI FOTO (👦 & 👧) --- */
 .profile-img-container {
     width: 130px;
     height: 130px;
