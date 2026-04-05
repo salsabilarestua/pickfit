@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f5f2;
+    color: #333;
+}
+
+#navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 8%; 
+    background: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    position: fixed; 
+    top: 0; left: 0; width: 100%;    
+    z-index: 9999;  
+}
+
+.logo {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    color: #333 !important;
+}
+
+.logo span { color: #c9a38d !important; }
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.mix-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 100px 2% 50px; 
+    max-width: 1300px; 
+    margin: 0 auto;
+}
+
+.sidebar-kiri { 
+    flex: 0 0 280px; 
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    height: 700px;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+}
+
+.canvas-wrapper { 
+    flex: 1; 
+    max-width: 550px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-kanan { 
+    flex: 0 0 300px; 
+    height: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.canvas-area {
+    width: 100%;
+    height: 550px; 
+    border: 2px dashed #c9a38d;
+    border-radius: 25px;
+    background-color: #ffffff;
+    position: relative;
+    overflow: hidden; 
+    transition: 0.3s;
+}
+
+.canvas-area:hover {
+    background-color: #fdfaf8;
+    border-color: #1a1a1a;
+}
+
+.canvas-area img {
+    max-width: 140px !important; 
+    height: auto;
+    cursor: move;
+    position: absolute;
+    z-index: 10;
+}
+
+.item-wrapper {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    padding: 12px;
+    margin-bottom: 15px;
+    text-align: center;
+    cursor: grab;
+    transition: 0.3s;
+}
+
+.item-wrapper:hover { transform: translateY(-3px); }
+
+.item-wrapper img {
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+}
+
+.btn-save {
+    width: 100%;
+    background: #1a1a1a;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.btn-save:hover {
+    background: #c9a38d;
+    transform: translateY(-2px);
+}
+
+.saved-outfits-container {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+}
+
+.dragging {
+    opacity: 0.4;
+    transform: scale(0.8);
+}
+
+.sidebar-kiri h3, .saved-outfits-container h3 {
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.status-tersedia, .status-siap, .status-badge.status-tersedia { 
+    background-color: #e8f5e9 !important; 
+    color: #2e7d32 !important;            
+    border: 1px solid #c8e6c9 !important; 
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    display: inline-block;
+}
