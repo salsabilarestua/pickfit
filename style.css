@@ -216,9 +216,9 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
     border-radius: 10px;
 }
 
-/* FITUR PROFILE */
+/* --- FIX FITUR PROFILE --- */
 .profile-wrapper {
-    padding: 100px 5% 50px;
+    padding: 120px 5% 50px; 
     min-height: 100vh;
     background: #f8f5f2;
     display: flex;
@@ -230,9 +230,151 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
     background: white;
     display: flex;
     width: 100%;
-    max-width: 850px;
+    max-width: 900px; 
     border-radius: 25px;
     overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+}
+
+.profile-left {
+    flex: 1;
+    background: #faf7f4;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-right: 1px solid #eee;
+}
+
+.profile-img-container {
+    width: 120px;
+    height: 120px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.gender-anim span {
+    margin: 0 5px;
+}
+
+.signature-hero {
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.2rem;
+    color: #c9a38d;
+    margin-bottom: 30px;
+}
+
+.btn-logout {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-logout:hover {
+    background: #ff5252;
+    transform: translateY(-2px);
+}
+
+.profile-right {
+    flex: 1.5; 
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-right h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.divider {
+    border: none;
+    height: 2px;
+    background: #c9a38d;
+    width: 50px;
+    margin-bottom: 30px;
+}
+
+.profile-info-group {
+    margin-bottom: 20px;
+}
+
+.profile-info-group label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #aaa;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.profile-info-group p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Responsif Mobile */
+@media screen and (max-width: 768px) {
+    .profile-card {
+        flex-direction: column; 
+    }
+    
+    .profile-left {
+        padding: 30px;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-right {
+        padding: 30px;
+    }
+}
+
+.gender-anim {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gender-anim span {
+    position: absolute;
+    opacity: 0;
+    animation: switchEmoji 4s infinite; 
+}
+
+.gender-anim span:last-child {
+    animation-delay: 2s;
+}
+
+@keyframes switchEmoji {
+    0%, 45% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    50%, 100% {
+        opacity: 0; 
+        transform: scale(1);
+    }
 }
 
 /* FOOTER */
