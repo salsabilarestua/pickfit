@@ -2,8 +2,7 @@ window.onload = function() {
     const lemariList = document.getElementById("lemari-list");
     const canvas = document.getElementById("canvas");
     const instructionText = canvas.querySelector("p");
-
-    let koleksi = JSON.parse(localStorage.getItem("lemariPickFit")) || [];
+    let koleksiLemari = JSON.parse(localStorage.getItem("lemariPickFit")) || [];
 
     function updateInstruction() {
         const itemCount = canvas.querySelectorAll(".dropped-item").length;
@@ -13,8 +12,7 @@ window.onload = function() {
     }
 
     lemariList.innerHTML = "<h3>Ambil dari Lemari</h3>";
-
-    const bajuSiap = koleksi.filter(item => (item.status === 'siap' || !item.status));
+    const bajuSiap = koleksiLemari.filter(item => (item.status === 'siap' || !item.status));
 
     if (bajuSiap.length === 0) {
         lemariList.innerHTML += "<p style='color:#aaa; text-align:center; font-size:12px; padding:10px;'>Tidak ada baju 'Siap Pakai'.<br>Cek status di Lemari!</p>";
@@ -24,19 +22,16 @@ window.onload = function() {
         const div = document.createElement("div");
         div.className = "item-wrapper";
         div.draggable = true;
-        
         div.innerHTML = `
             <img src="${item.foto}" draggable="false">
             <span class="status-badge status-tersedia">Siap Pakai</span>
         `;
-
         div.addEventListener("dragstart", (e) => {
             e.dataTransfer.setData("text/plain", item.foto);
         });
         lemariList.appendChild(div);
     });
 
-    // 4. Logika Drop ke Canvas
     canvas.addEventListener("dragover", (e) => e.preventDefault());
 
     canvas.addEventListener("drop", (e) => {
@@ -47,7 +42,6 @@ window.onload = function() {
         const img = document.createElement("img");
         img.src = src;
         img.className = "dropped-item"; 
-        
         const rect = canvas.getBoundingClientRect();
         img.style.position = "absolute";
         img.style.width = "160px";
@@ -58,16 +52,9 @@ window.onload = function() {
         canvas.appendChild(img);
         updateInstruction();
 
-        img.addEventListener("dblclick", () => {
-            img.remove();
-            updateInstruction();
-        });
-
-        img.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-            img.remove();
-            updateInstruction();
-        });
+        const removeItem = () => { img.remove(); updateInstruction(); };
+        img.addEventListener("dblclick", removeItem);
+        img.addEventListener("contextmenu", (e) => { e.preventDefault(); removeItem(); });
 
         img.onmousedown = function(event) {
             if (event.button !== 0) return;
@@ -92,38 +79,45 @@ window.onload = function() {
     if (saveBtn) {
         saveBtn.addEventListener("click", () => {
             const droppedItems = canvas.querySelectorAll(".dropped-item");
-            if (droppedItems.length === 0) return alert("Canvas kosong!");
+            if (droppedItems.length === 0) return alert("Canvas masih kosong, nih!");
 
-            const outfitData = Array.from(droppedItems).map(item => ({
-                src: item.src, left: item.style.left, top: item.style.top
-            }));
-
+            const outfitImages = Array.from(droppedItems).map(item => item.src);
             let savedOutfits = JSON.parse(localStorage.getItem("savedOutfits")) || [];
-            savedOutfits.push({
+            
+            const newOutfit = {
                 id: Date.now(),
                 date: new Date().toLocaleString(),
-                items: outfitData
-            });
+                items: outfitImages
+            };
 
+            savedOutfits.push(newOutfit);
             localStorage.setItem("savedOutfits", JSON.stringify(savedOutfits));
-            alert("Outfit disimpan!");
+            localStorage.setItem("koleksiOutfit", JSON.stringify(savedOutfits));
+            
+            alert("Outfit cantikmu berhasil disimpan ke koleksi!");
             tampilkanSavedOutfits();
         });
     }
+
     tampilkanSavedOutfits();
 };
 
 function tampilkanSavedOutfits() {
     const grid = document.getElementById("saved-outfits-grid");
     if (!grid) return;
+    
     const savedOutfits = JSON.parse(localStorage.getItem("savedOutfits")) || [];
     grid.innerHTML = "";
+
     savedOutfits.forEach((outfit, index) => {
         const card = document.createElement("div");
         card.className = "outfit-card";
-        let imgs = outfit.items.map(it => `<img src="${it.src}" style="width:30px; margin:2px;">`).join("");
+        let imgsHtml = outfit.items.map(url => 
+            `<img src="${url}" style="width:35px; height:35px; object-fit:contain; margin:2px;">`
+        ).join("");
+
         card.innerHTML = `
-            <div class="outfit-preview">${imgs}</div>
+            <div class="outfit-preview">${imgsHtml}</div>
             <button class="btn-delete-outfit" onclick="hapusOutfit(${index})">Hapus</button>
         `;
         grid.appendChild(card);
@@ -131,10 +125,11 @@ function tampilkanSavedOutfits() {
 }
 
 window.hapusOutfit = function(index) {
-    if (confirm("Hapus outfit ini?")) {
+    if (confirm("Yakin mau menghapus outfit ini dari koleksi?")) {
         let savedOutfits = JSON.parse(localStorage.getItem("savedOutfits")) || [];
         savedOutfits.splice(index, 1);
         localStorage.setItem("savedOutfits", JSON.stringify(savedOutfits));
+        localStorage.setItem("koleksiOutfit", JSON.stringify(savedOutfits));
         tampilkanSavedOutfits();
     }
 };

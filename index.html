@@ -21,9 +21,10 @@
         <div class="nav-container" id="nav-container">
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Beranda</a></li>
+                <li><a href="kategori.html">Inspirasi</a></li>
                 <li><a href="lemari.html">Lemari</a></li>
                 <li><a href="mixmatch.html">Mix & Match</a></li>
-                <li><a href="#">Planner</a></li>
+                <li><a href="planner.html">Planner</a></li>
             </ul>
 
             <div class="auth-buttons">
@@ -31,7 +32,6 @@
                     <a href="masuk.html" class="btn-link">Masuk</a>
                     <a href="daftar.html" class="btn-black">DAFTAR</a>
                 </div>
-
                 <div id="user-menu" style="display: none;">
                     <a href="profile.html" class="btn-link" style="color: var(--orange-accent); font-weight: 600;">PROFIL SAYA</a>
                 </div>
@@ -41,9 +41,10 @@
 
     <header class="hero">       
         <div class="hero-content">
-            <span class="signature-hero">Style by You</span> <h1>Tentukan Gaya Terbaikmu</h1>
+            <span class="signature-hero">Style by You</span> 
+            <h1>Tentukan Gaya Terbaikmu</h1>
             <p>PICK YOUR OUTFIT EASILY</p>
-            <button class="btn-nude">MULAI SEKARANG</button>
+            <button class="btn-nude" onclick="location.href='lemari.html'">MULAI SEKARANG</button>
         </div>
     </header>
 
@@ -51,7 +52,7 @@
         <h2 class="section-title">Kategori OOTD</h2>
         <div class="category-grid">
         
-            <div class="category-item">
+            <div class="category-item" onclick="location.href='kategori.html'" style="cursor: pointer;">
                 <img src="formal.jpg" alt="Formal">
                 <div class="overlay"><h3>Acara Formal</h3></div>
             </div>
@@ -61,21 +62,21 @@
                 <div class="overlay-center">
                     <p class="signature-light">Inspirasi</p>
                     <h2 class="cat-brand">PICKFIT</h2>
-                    <button class="btn-outline">Lihat Semua</button>
+                    <a href="kategori.html" class="btn-outline" style="text-decoration: none; display: inline-block;">Lihat Semua</a>
                 </div>
             </div>
 
-            <div class="category-item">
+            <div class="category-item" onclick="location.href='kategori.html'" style="cursor: pointer;">
                 <img src="casual.avif" alt="Harian">
                 <div class="overlay"><h3>Gaya Harian</h3></div>
             </div>
 
-            <div class="category-item">
+            <div class="category-item" onclick="location.href='kategori.html'" style="cursor: pointer;">
                 <img src="wedding.jpg" alt="Wedding">
                 <div class="overlay"><h3>Wedding Invite</h3></div>
             </div>
 
-            <div class="category-item">
+            <div class="category-item" onclick="location.href='kategori.html'" style="cursor: pointer;">
                 <img src="date.jpg" alt="Date">
                 <div class="overlay"><h3>Date Night</h3></div>
             </div>

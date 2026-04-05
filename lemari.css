@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap');
 
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background-color: #f6f3f0;
+    color: #333;
+}
+
 #navbar {
     display: flex;
     justify-content: space-between;
@@ -50,20 +57,9 @@
     color: #c9a38d !important;
 }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    background-color: #fdfdfd;
-    color: #333;
-}
-
 .container {
     padding-top: 100px !important; 
     padding-bottom: 50px;
-}
-
-.mix-container {
-    margin-top: 80px !important;
 }
 
 .section-title {
@@ -80,11 +76,18 @@ body {
     box-shadow: 0 10px 40px rgba(0,0,0,0.03);
     text-align: center;
     border: 1px solid #f0f0f0;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
-.auth-card h3 { margin-bottom: 20px; font-size: 1.1rem; color: #555; }
+.auth-card h3 { 
+    margin-bottom: 20px; 
+    font-size: 1.1rem; 
+    color: #555; 
+}
 
-.auth-card input, .auth-card select {
+.auth-card input, 
+.auth-card select {
     width: 100%;
     padding: 12px;
     margin: 8px 0;
@@ -105,9 +108,13 @@ body {
     cursor: pointer;
     transition: 0.3s;
     letter-spacing: 1px;
+    width: 100%;
 }
 
-.btn-black:hover { background: #a0785d; transform: translateY(-2px); }
+.btn-black:hover { 
+    background: #a0785d; 
+    transform: translateY(-2px); 
+}
 
 #grid-lemari {
     display: grid;
@@ -127,7 +134,10 @@ body {
     border: 1px solid #f5f5f5;
 }
 
-.wardrobe-item:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+.wardrobe-item:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08); 
+}
 
 .wardrobe-item img {
     width: 100%;
@@ -177,6 +187,13 @@ body {
     cursor: pointer;
 }
 
-.btn-delete:hover { color: #ff5252; }
+.btn-delete:hover { 
+    color: #ff5252; 
+}
 
-footer { text-align: center; padding: 40px; color: #aaa; font-size: 12px; }
+footer { 
+    text-align: center; 
+    padding: 40px; 
+    color: #aaa; 
+    font-size: 12px; 
+}
