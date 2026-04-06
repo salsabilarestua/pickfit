@@ -216,7 +216,46 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
     border-radius: 10px;
 }
 
-/* --- FIX FITUR PROFILE --- */
+.btn-link {
+    text-decoration: none;
+    color: #666; 
+    font-weight: 600;
+    margin-right: 20px;
+    transition: 0.3s;
+}
+
+.btn-link:hover {
+    color: #000; 
+}
+
+.btn-black {
+    text-decoration: none;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-black:hover {
+    background-color: #444;
+}
+
+.auth-buttons #guest-menu {
+    display: flex;
+    align-items: center;
+}
+
+.auth-card a {
+    text-decoration: none; 
+    color: #666;           
+    font-size: 0.9rem;    
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+/*Profil*/
 .profile-wrapper {
     padding: 120px 5% 50px; 
     min-height: 100vh;
