@@ -170,6 +170,14 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
 .category-item { position: relative; height: 300px; overflow: hidden; border-radius: 15px; }
 .category-item img { width: 100%; height: 100%; object-fit: cover; }
 
+.section-title {
+    text-align: center;     
+    margin-top: 40px;        
+    margin-bottom: 30px;     
+    font-family: 'Playfair Display', serif; 
+    width: 100%;           
+}
+
 .overlay {
     position: absolute;
     inset: 0;
@@ -180,6 +188,39 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
     align-items: center;
     color: white;
     padding: 20px;
+}
+
+.btn-see-all {
+    margin-top: 15px;
+    padding: 10px 30px;
+    background-color: var(--orange-accent); 
+    color: white;
+    text-decoration: none;
+    border-radius: 50px; 
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-block; 
+}
+
+.btn-see-all:hover {
+    background-color: var(--grey-dark); 
+    transform: translateY(-3px); 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.overlay-center {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.3); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
 }
 
 @media (min-width: 1024px) {
