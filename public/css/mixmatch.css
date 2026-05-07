@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f5f2;
+    color: #333;
+}
+
+#navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 8%;
+    background: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;           
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.6rem !important;
+    font-weight: 700;
+    color: #333333 !important;
+    text-decoration: none !important;
+}
+
+.logo span {
+    color: #c9a38d !important;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex !important;
+    list-style: none !important;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none !important;
+    color: #333333;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.nav-links a.active, 
+.nav-links a:hover {
+    color: #c9a38d !important;
+}
+
+.menu-toggle {
+    display: none !important;
+}
+
+/* =========================
+   MIXMATCH LAYOUT FIX
+========================= */
+
+.mix-container {
+    display: grid;
+    grid-template-columns: 220px 1fr 230px;
+    gap: 28px;
+    padding: 120px 3% 40px;
+    align-items: start;
+}
+
+/* =========================
+   LEMARI KIRI
+========================= */
+.lemari-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.lemari-list h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    line-height: 1.3;
+    color: #1f1f1f;
+    margin-bottom: 5px;
+}
+
+/* Card item */
+.lemari-item {
+    width: 150px;
+    min-height: 160px;
+    background: white;
+    border-radius: 20px;
+    padding: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    cursor: grab;
+    transition: 0.3s ease;
+}
+
+.lemari-item:hover {
+    transform: translateY(-4px);
+}
+
+.lemari-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+/* Nama item */
+.lemari-item p {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 8px;
+
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Badge */
+.status-badge {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-tersedia,
+.status-siap {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* =========================
+   CANVAS TENGAH
+========================= */
+.canvas-area {
+    position: relative;
+    min-height: 550px;
+    background: transparent;
+    border: 3px dashed #222;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.canvas-area p {
+    color: #a8adb3;
+    font-size: 2rem;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* Item drop */
+.dropped-item {
+    position: absolute;
+    width: 160px;
+    height: auto;
+    object-fit: contain;
+    cursor: move;
+    user-select: none;
+}
+
+/* =========================
+   PANEL KANAN
+========================= */
+.action-area,
+.saved-outfits-container {
+    background: white;
+    border-radius: 22px;
+    padding: 18px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.action-area {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Tombol save */
+.btn-save {
+    width: 100%;
+    background: #111;
+    color: white;
+    border: none;
+    padding: 18px 12px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-save:hover {
+    transform: scale(1.03);
+}
+
+/* Koleksi */
+.saved-outfits-container h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    line-height: 1.2;
+    text-align: center;
+    color: #1d1d1d;
+    margin-bottom: 18px;
+}
+
+/* Outfit grid */
+.outfits-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Outfit card */
+.outfit-card {
+    text-align: center;
+    padding: 12px;
+    border-radius: 16px;
+    background: #fafafa;
+}
+
+.outfit-preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.outfit-preview img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
+/* Delete */
+.btn-delete-outfit {
+    background: white;
+    border: 1px solid #999;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1100px) {
+    .mix-container {
+        grid-template-columns: 1fr;
+    }
+
+    .lemari-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .lemari-item {
+        width: 140px;
+    }
+
+    .canvas-area {
+        min-height: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .canvas-area {
+        min-height: 380px;
+    }
+
+    .canvas-area p {
+        font-size: 1.2rem;
+    }
+
+    .lemari-list h3,
+    .saved-outfits-container h3 {
+        font-size: 1.5rem;
+    }
+}
