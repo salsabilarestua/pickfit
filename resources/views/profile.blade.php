@@ -1,120 +1,45 @@
-@extends('layouts.app')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Saya - PICKFIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+</head>
+<body class="profile-page">
 
-@section('content')
-
-<section class="profile-wrapper">
-
-    <div class="profile-card">
-
-        {{-- LEFT SIDE --}}
-        <div class="profile-left">
-
-            <div class="profile-img-container">
-                👗
-            </div>
-
-            <h2>{{ Auth::user()->name }}</h2>
-
-            <p style="color:#777; margin:10px 0 20px;">
-                {{ Auth::user()->email }}
-            </p>
-
-            <span class="signature-hero">
-                Style by You
-            </span>
-
-            <form action="/logout" method="POST">
-                @csrf
-
-                <button type="submit" class="btn-logout">
-                    Logout
-                </button>
-            </form>
-
+    <nav id="navbar">
+        <a href="/" class="logo">PICK<span>FIT</span></a>
+        <div class="nav-container" id="nav-container">
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+            </ul>
         </div>
+    </nav>
 
-        {{-- RIGHT SIDE --}}
-        <div class="profile-right">
-
-            <h2 style="margin-bottom: 25px;">
-                Dashboard Saya
-            </h2>
-
-            <div style="
-                display:grid;
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap:20px;
-                width:100%;
-            ">
-
-                {{-- TOTAL LEMARI --}}
-                <div style="
-                    background:#faf7f4;
-                    padding:25px;
-                    border-radius:18px;
-                    text-align:center;
-                ">
-                    <h3 style="font-size:2rem; color:#c9a38d;">
-                        {{ $totalWardrobe ?? 0 }}
-                    </h3>
-
-                    <p>Total Lemari</p>
+    <main class="profile-wrapper">
+        <div class="profile-card">
+            <div class="profile-left">
+                <div class="profile-img-container">
+                    <div class="gender-anim">
+                        <span>👦</span>
+                        <span>👧</span>
+                    </div>
                 </div>
-
-                {{-- TOTAL OUTFIT --}}
-                <div style="
-                    background:#faf7f4;
-                    padding:25px;
-                    border-radius:18px;
-                    text-align:center;
-                ">
-                    <h3 style="font-size:2rem; color:#c9a38d;">
-                        {{ $totalOutfit ?? 0 }}
-                    </h3>
-
-                    <p>Mix & Match</p>
-                </div>
-
-                {{-- TOTAL PLANNER --}}
-                <div style="
-                    background:#faf7f4;
-                    padding:25px;
-                    border-radius:18px;
-                    text-align:center;
-                ">
-                    <h3 style="font-size:2rem; color:#c9a38d;">
-                        {{ $totalPlanner ?? 0 }}
-                    </h3>
-
-                    <p>Planner Aktif</p>
-                </div>
-
+                <h3 class="signature-hero"> <span id="welcome-msg">...</span>!</h3>
+                <button class="btn-logout" id="logout-btn">Keluar Akun</button>
             </div>
 
-            <div style="
-                margin-top:30px;
-                padding:20px;
-                background:white;
-                border:1px solid #eee;
-                border-radius:18px;
-            ">
-                <h3 style="margin-bottom:10px;">
-                    Ringkasan Akun
-                </h3>
-
-                <p><strong>Nama:</strong> {{ Auth::user()->name }}</p>
-
-                <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
-
-                <p><strong>Bergabung:</strong>
-                    {{ Auth::user()->created_at->format('d M Y') }}
-                </p>
+            <div class="profile-right">
+                <h2>Informasi Profil</h2>
+                <hr class="divider">
+                
+                <div class="profile-info-group">
+                    <label>Nama Pengguna</label>
+                    <p id="display-username">Memuat...</p>
+                </div>
             </div>
-
         </div>
+    </main>
 
-    </div>
-
-</section>
-
-@endsection
+    <script src="{{ asset('js/script.js') }}"></script>
+</body>

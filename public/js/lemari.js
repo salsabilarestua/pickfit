@@ -13,37 +13,26 @@ function tampilkanLemari() {
     }
     
     koleksi.forEach((item, index) => {
-        if (item.status === 'jemur' || !item.status) {
-            item.status = 'siap'; 
-        }
-        
-        const status = item.status; 
         const card = document.createElement('div');
         card.className = "wardrobe-item";
         card.innerHTML = `
             <img src="${item.foto}" alt="${item.nama}">
             <p style="font-weight:600; margin-top:12px; margin-bottom: 5px;">${item.nama}</p>
         
-            <div class="item-controls">
-                <div class="status-badge status-${status}" onclick="toggleStatus(${index})" style="cursor:pointer">
-                    ${status === 'siap' ? 'Siap Pakai' : 'Sedang Dicuci'}
-                </div>
-                <button class="btn-delete" onclick="hapusBaju(${index})">Hapus Item</button>
+            <div class="item-controls" style="justify-content: center;">
+                <button class="btn-delete" onclick="hapusBaju(${index})" style="width: 100%;">Hapus Item</button>
             </div>
         `;
         gridLemari.appendChild(card);
     });
-
-    localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
 }
 
 if (btnTambah) {
     btnTambah.addEventListener('click', async () => {
         const nama = document.getElementById('nama-baju').value;
         const fileInput = document.getElementById('foto-baju');
-        const statusBaju = document.getElementById('status-baju') ? document.getElementById('status-baju').value : 'Siap Pakai';
         
-        const statusKey = (statusBaju === "Siap Pakai") ? "siap" : "cuci";
+        // API Key Remove.bg 
         const apiKey = "XN53EsNF4LQT3TzJdM6qNCFx";
 
         if (!nama || fileInput.files.length === 0) {
@@ -70,10 +59,11 @@ if (btnTambah) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     const koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
-                    koleksi.push({ nama, foto: reader.result, status: statusKey });
+                    // Menyimpan data 
+                    koleksi.push({ nama, foto: reader.result });
                     localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
                     
-                    // Reset form
+                    // Reset form unggah
                     document.getElementById('nama-baju').value = "";
                     fileInput.value = "";
                     
@@ -92,15 +82,6 @@ if (btnTambah) {
         }
     });
 }
-
-window.toggleStatus = function(index) {
-    let koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
-    
-    koleksi[index].status = (koleksi[index].status === 'siap') ? 'cuci' : 'siap';
-    
-    localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
-    tampilkanLemari();
-};
 
 window.hapusBaju = function(index) {
     if(confirm("Hapus item ini dari lemari?")) {

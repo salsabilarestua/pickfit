@@ -1,89 +1,131 @@
-document.addEventListener("DOMContentLoaded", () => {
-    /* =========================
-       NAVBAR RESPONSIVE
-    ========================= */
-    const nav = document.getElementById("navbar");
-    const menuBtn = document.getElementById("mobile-menu");
-    const navContainer = document.getElementById("nav-container");
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // NAVIGASI & RESPONSIVE
+    const nav = document.getElementById('navbar');
+    const menuBtn = document.getElementById('mobile-menu');
+    const navContainer = document.getElementById('nav-container');
 
-    window.addEventListener("scroll", () => {
-        if (!nav) return;
-
-        if (window.scrollY > 50) {
-            nav.style.padding = "0.8rem 8%";
-            nav.style.boxShadow = "0 5px 15px rgba(0,0,0,0.05)";
-        } else {
-            nav.style.padding = "1.2rem 8%";
-            nav.style.boxShadow = "none";
+    window.addEventListener('scroll', () => {
+        if (nav && window.scrollY > 50) {
+            nav.style.padding = '0.8rem 8%';
+            nav.style.boxShadow = '0 5px 15px rgba(0,0,0,0.05)';
+        } else if (nav) {
+            nav.style.padding = '1.2rem 8%';
+            nav.style.boxShadow = 'none';
         }
     });
 
     if (menuBtn && navContainer) {
-        menuBtn.addEventListener("click", () => {
-            navContainer.classList.toggle("active-nav");
-
-            const spans = menuBtn.querySelectorAll("span");
-
-            if (navContainer.classList.contains("active-nav")) {
-                spans[0].style.transform =
-                    "rotate(45deg) translate(5px, 5px)";
-                spans[1].style.opacity = "0";
-                spans[2].style.transform =
-                    "rotate(-45deg) translate(6px, -7px)";
+        menuBtn.addEventListener('click', () => {
+            navContainer.classList.toggle('active-nav');
+            const spans = menuBtn.querySelectorAll('span');
+            if(navContainer.classList.contains('active-nav')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(6px, -7px)';
             } else {
-                spans[0].style.transform = "none";
-                spans[1].style.opacity = "1";
-                spans[2].style.transform = "none";
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
             }
         });
 
-        const navLinks = navContainer.querySelectorAll("a");
-
-        navLinks.forEach((link) => {
-            link.addEventListener("click", () => {
-                navContainer.classList.remove("active-nav");
-
-                const spans = menuBtn.querySelectorAll("span");
-
-                spans[0].style.transform = "none";
-                spans[1].style.opacity = "1";
-                spans[2].style.transform = "none";
+        const navLinks = navContainer.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navContainer.classList.remove('active-nav');
+                const spans = menuBtn.querySelectorAll('span');
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
             });
         });
     }
 
-    /* =========================
-       AUTO HIDE FLASH MESSAGE
-    ========================= */
-    const flashMessage = document.querySelector(
-        ".alert, .success-message, .error-message"
-    );
 
-    if (flashMessage) {
-        setTimeout(() => {
-            flashMessage.style.transition = "0.5s";
-            flashMessage.style.opacity = "0";
-
-            setTimeout(() => {
-                flashMessage.remove();
-            }, 500);
-        }, 3000);
+    // DAFTAR & MASUK
+    
+    // DAFTAR
+    const formRegistrasi = document.getElementById('form-registrasi');
+    if (formRegistrasi) {
+        formRegistrasi.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nama = formRegistrasi.querySelector('input[type="text"]').value;
+            
+            localStorage.setItem('registeredName', nama);
+            
+            alert(`Halo ${nama}, pendaftaran berhasil!`);
+            window.location.href = "/masuk"; 
+        });
     }
 
-    /* =========================
-       SMOOTH SCROLL INTERNAL LINK
-    ========================= */
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-            const target = document.querySelector(this.getAttribute("href"));
+    //MASUK
+    const formLogin = document.getElementById('form-login');
+    if (formLogin) {
+        formLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = formLogin.querySelector('input[type="email"]');
+            const passwordInput = formLogin.querySelector('input[type="password"]');
 
-            if (target) {
-                e.preventDefault();
+            if (emailInput.value && passwordInput.value) {
+                let namaLengkap = localStorage.getItem('registeredName');
+                
+                if (!namaLengkap) {
+                    const rawName = emailInput.value.split('@')[0];
+                    namaLengkap = rawName.replace(/[._-]/g, ' ')
+                                         .replace(/\b\w/g, char => char.toUpperCase());
+                }
+                localStorage.setItem('activeUser', namaLengkap);
 
-                target.scrollIntoView({
-                    behavior: "smooth",
-                });
+                alert("Login Berhasil! Selamat datang, " + namaLengkap);
+                window.location.href = "/"; 
+            } else {
+                alert("Harap isi email dan password!");
             }
         });
-    });
+    }
+
+    if (typeof tampilkanLemari === 'function') {
+        tampilkanLemari();
+    }
+});
+
+// PROFIL
+document.addEventListener("DOMContentLoaded", function() {
+    const savedUsername = localStorage.getItem('activeUser');
+    const displayUsername = document.getElementById('display-username');
+    const guestMenu = document.getElementById('guest-menu');
+    const userMenu = document.getElementById('user-menu');
+
+    if (savedUsername) {
+        if(guestMenu) guestMenu.style.display = 'none';
+        if(userMenu) userMenu.style.display = 'block';  
+    } else {
+        if(guestMenu) guestMenu.style.display = 'block';
+        if(userMenu) userMenu.style.display = 'none';
+    }
+
+    //CETAK KE HALAMAN PROFIL
+    if (displayUsername) { 
+        if (savedUsername) {
+            displayUsername.textContent = savedUsername;
+            const welcomeMsg = document.getElementById('welcome-msg');
+            if(welcomeMsg) welcomeMsg.textContent = "Halo, " + savedUsername + "!";
+        } else {
+            alert("Silakan masuk terlebih dahulu!");
+            window.location.href = "/masuk"; 
+        }
+    }
+
+    //KELUAR AKUN
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function() {
+            localStorage.removeItem('activeUser');
+            localStorage.removeItem('registeredName'); 
+            
+            alert("Kamu telah keluar. Sampai jumpa lagi!");
+            window.location.href = "/";
+        });
+    }
 });

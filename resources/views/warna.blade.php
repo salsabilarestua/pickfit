@@ -1,77 +1,77 @@
-@extends('layouts.app')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PickFit - Rekomendasi Warna</title>
+    <link rel="stylesheet" href="{{ asset('css/warna.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
 
-@section('content')
-
-<link rel="stylesheet" href="{{ asset('css/warna.css') }}">
-
-<section class="container" style="padding-top: 130px;">
-
-    <h2 class="section-title">Rekomendasi Palet Warna</h2>
-
-    <p class="subtitle">
-        Pilih kombinasi warna terbaik untuk gaya harian, formal, maupun acara spesialmu.
-    </p>
-
-    <div class="palette-grid">
-
-        {{-- EARTHY NATURE --}}
-        <div class="palette-card" onclick="selectPalette('Earthy Nature')">
-
-            <div class="color-previews">
-                <div class="color-box" style="background: #6b705c;" title="#6b705c"></div>
-                <div class="color-box" style="background: #a5a58d;" title="#a5a58d"></div>
-                <div class="color-box" style="background: #b7b7a4;" title="#b7b7a4"></div>
-                <div class="color-box" style="background: #ffe8d6;" title="#ffe8d6"></div>
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">Pick<span>Fit</span></a>
+            
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
             </div>
 
-            <div class="palette-info">
-                <h3>Earthy Nature</h3>
-                <p>Cocok untuk tampilan kalem, elegan, dan profesional.</p>
-            </div>
-
+            <ul class="nav-links" id="nav-list">
+                <li><a href="/">BERANDA</a></li>
+                <li><a href="/lemari">LEMARI</a></li>
+                <li><a href="/mixmatch">MIX & MATCH</a></li>
+                <li><a href="/planner">PLANNER</a></li>
+            </ul>
         </div>
+    </nav>
 
-        {{-- SOFT MINIMALIST --}}
-        <div class="palette-card" onclick="selectPalette('Soft Minimalist')">
-
-            <div class="color-previews">
-                <div class="color-box" style="background: #cb997e;" title="#cb997e"></div>
-                <div class="color-box" style="background: #eddcd2;" title="#eddcd2"></div>
-                <div class="color-box" style="background: #fff1e6;" title="#fff1e6"></div>
-                <div class="color-box" style="background: #f0efeb;" title="#f0efeb"></div>
+    <section class="container" style="margin-top: 100px;">
+        <h2 class="section-title">Rekomendasi Palet Warna</h2>
+    
+        <div class="palette-grid">
+            <div class="palette-card" onclick="selectPalette('Earthy Nature')">
+                <div class="color-previews">
+                    <div class="color-box" style="background: #6b705c;" title="#6b705c"></div>
+                    <div class="color-box" style="background: #a5a58d;" title="#a5a58d"></div>
+                    <div class="color-box" style="background: #b7b7a4;" title="#b7b7a4"></div>
+                    <div class="color-box" style="background: #ffe8d6;" title="#ffe8d6"></div>
+                </div>
+                <div class="palette-info">
+                    <h3>Earthy Nature</h3>
+                    <p>Cocok untuk tampilan kalem dan profesional.</p>
+                </div>
             </div>
 
-            <div class="palette-info">
-                <h3>Soft Minimalist</h3>
-                <p>Palet ideal untuk capsule wardrobe dan clean aesthetic.</p>
+            <div class="palette-card" onclick="selectPalette('Soft Minimalist')">
+                <div class="color-previews">
+                    <div class="color-box" style="background: #cb997e;" title="#cb997e"></div>
+                    <div class="color-box" style="background: #eddcd2;" title="#eddcd2"></div>
+                    <div class="color-box" style="background: #fff1e6;" title="#fff1e6"></div>
+                    <div class="color-box" style="background: #f0efeb;" title="#f0efeb"></div>
+                </div>
+                <div class="palette-info">
+                    <h3>Soft Minimalist</h3>
+                    <p>Palet andalan untuk gaya Capsule Wardrobe.</p>
+                </div>
             </div>
 
+            <div class="palette-card" onclick="selectPalette('Urban Bold')">
+                <div class="color-previews">
+                    <div class="color-box" style="background: #003049;" title="#003049"></div>
+                    <div class="color-box" style="background: #d62828;" title="#d62828"></div>
+                    <div class="color-box" style="background: #f77f00;" title="#f77f00"></div>
+                    <div class="color-box" style="background: #fcbf49;" title="#fcbf49"></div>
+                </div>
+                <div class="palette-info">
+                    <h3>Urban Bold</h3>
+                    <p>Kombinasi berani untuk acara malam.</p>
+                </div>
+            </div>
         </div>
+        
+        <div id="feedback-message" class="hidden"></div>
+    </section>
 
-        {{-- URBAN BOLD --}}
-        <div class="palette-card" onclick="selectPalette('Urban Bold')">
-
-            <div class="color-previews">
-                <div class="color-box" style="background: #003049;" title="#003049"></div>
-                <div class="color-box" style="background: #d62828;" title="#d62828"></div>
-                <div class="color-box" style="background: #f77f00;" title="#f77f00"></div>
-                <div class="color-box" style="background: #fcbf49;" title="#fcbf49"></div>
-            </div>
-
-            <div class="palette-info">
-                <h3>Urban Bold</h3>
-                <p>Kombinasi berani untuk event malam dan statement look.</p>
-            </div>
-
-        </div>
-
-    </div>
-
-    {{-- FEEDBACK MESSAGE --}}
-    <div id="feedback-message" class="hidden"></div>
-
-</section>
-
-<script src="{{ asset('js/warna.js') }}"></script>
-
-@endsection
+    <script src="{{ asset('js/warna.js') }}"></script>
+</body>
