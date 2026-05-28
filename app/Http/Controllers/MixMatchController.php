@@ -10,11 +10,10 @@ class MixMatchController extends Controller
     {
         // Return view tanpa membawa database karena data baju ada di localStorage user
         return view('mixmatch');
-    }
-}
+    } // Kurung kurawal index ditutup di sini
 
-
-public function panggilGemini(\Illuminate\Http\Request $request)
+    // Fungsi panggilGemini sekarang sudah aman di dalam Class
+    public function panggilGemini(\Illuminate\Http\Request $request)
     {
         $base64Image = $request->input('image');
         $namaItem = $request->input('name');
@@ -97,3 +96,4 @@ public function panggilGemini(\Illuminate\Http\Request $request)
             return response()->json(['error' => 'Gagal koneksi ke server Google: ' . $e->getMessage()], 500);
         }
     }
+} // Tanda penutup class MixMatchController sekarang berada di paling akhir file
