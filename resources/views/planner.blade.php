@@ -81,5 +81,5 @@
     window.userPlans = @json($plans);
 </script>
 <script src="{{ asset('js/planner.js') }}"></script>
-
+/tes push
 @endsection
