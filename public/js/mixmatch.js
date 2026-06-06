@@ -1,5 +1,4 @@
-// REVISI TOTAL: API Key di bawah ini sudah dipastikan menggunakan 'k' kecil di ujungnya!
-const GEMINI_API_KEY = "AIzaSyDNj27dA9i7JJYSDS50quU7w2dIcHPlvJk"; 
+const GROQ_API_KEY = "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"; 
 
 document.addEventListener("DOMContentLoaded", () => {
     const video = document.getElementById("webcam");
@@ -26,39 +25,58 @@ document.addEventListener("DOMContentLoaded", () => {
         }).join("").toUpperCase();
     }
 
-// ================================================================
-    // JALUR EMAS: TEMBUS LEWAT BACKEND LARAVEL (BEBAS CORS & BEBAS CSRF)
     // ================================================================
-    async function panggilGeminiAI(base64Image, namaItem) {
+    // JALUR EMAS: TEMBUS LEWAT BACKEND LARAVEL (OTOMATIS & BERSIH KATA GEMINI)
+    // ================================================================
+    async function panggilGroqAI() {
         const textContainer = document.getElementById("ai-text-tips-dynamic");
-        textContainer.innerHTML = `<div class="ai-loading-pulsate"><i class="fa-solid fa-circle-notch fa-spin"></i> Menghubungi AI Outfit Planner via Server...</div>`;
+        
+        const shirtEl = document.getElementById("status-shirt");
+        const pantsEl = document.getElementById("status-pants");
+
+        const namaAtasan = shirtEl ? shirtEl.textContent.trim() : "";
+        const namaBawahan = pantsEl ? pantsEl.textContent.trim() : "";
+
+        // Pengaman: Jangan tembak API jika pengguna belum selesai memilih atasan ATAU bawahan
+        if (!namaAtasan || namaAtasan.includes("Belum memilih") || !namaBawahan || namaBawahan.includes("Belum memilih")) {
+            textContainer.innerHTML = `<p style="color: #cca300; text-align:center;"><i class="fa-solid fa-info-circle"></i> Pasang dulu Atasan dan Bawahan di badan kamu untuk melihat rekomendasi OOTD otomatis! 😉</p>`;
+            return;
+        }
+
+        // Tampilkan animasi loading otomatis bertuliskan Groq AI
+        textContainer.innerHTML = `
+            <div class="ai-loading-pulsate" style="text-align: center; padding: 20px;">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 24px; color: #595843;"></i> 
+                <p style="margin-top: 10px;">Groq AI sedang menganalisis kombinasi ${namaAtasan} + ${namaBawahan}...</p>
+            </div>`;
+
+        const tokenCsrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
         try {
-            // Menembak rute lokal Laravel (Aman dari blokir CORS Browser)
             const response = await fetch('/api/gemini-recommendation', {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": tokenCsrf 
                 },
                 body: JSON.stringify({
-                    image: base64Image,
-                    name: namaItem
+                    atasan: namaAtasan,
+                    bawahan: namaBawahan
                 })
             });
 
             const data = await response.json();
             
             if (response.ok && data.text) {
-                // Sukses! Masukkan teks rekomendasi dari Gemini ke halaman web
                 textContainer.innerHTML = data.text;
             } else {
-                textContainer.innerHTML = `<p style="color: #d96a6a;"><i class="fa-solid fa-triangle-exclamation"></i> Server Menolak: ${data.error || 'Gagal memproses gambar'}</p>`;
+                textContainer.innerHTML = `<p style="color: #d96a6a;"><i class="fa-solid fa-triangle-exclamation"></i> AI Menolak: ${data.error || 'Gagal menganalisis gaya.'}</p>`;
             }
 
         } catch (error) {
             console.error("Fetch API Error Log:", error);
-            textContainer.innerHTML = `<p style="color: #d96a6a;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal terhubung ke endpoint server local.</p>`;
+            textContainer.innerHTML = `<p style="color: #d96a6a;"><i class="fa-solid fa-triangle-exclamation"></i> Gagal terhubung ke server local.</p>`;
         }
     }
 
@@ -104,13 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 imgObj.onload = () => {
                     document.getElementById("ai-planner-box").style.display = "block";
                     try {
-                        // 1. Ekstraksi warna dasar kain pakaian via ColorThief
                         const rgbDominan = colorThief.getColor(imgObj);
                         const hexDominan = rgbToHex(rgbDominan[0], rgbDominan[1], rgbDominan[2]);
                         document.getElementById("detected-color-indicator").style.backgroundColor = hexDominan;
                         document.getElementById("detected-color-name").textContent = hexDominan;
                         
-                        // 2. Render Palet Rekomendasi Warna Pelengkap
                         const listPalet = document.getElementById("recommended-colors-list");
                         listPalet.innerHTML = "";
                         const palet = [
@@ -126,8 +142,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </div>`;
                         });
 
-                        // 3. Tembak Live Foto Unggahan ke Google Gemini AI
-                        panggilGeminiAI(item.foto, item.nama);
+                        // MODIFIKASI SELESAI: Panggil fungsi Groq AI secara otomatis saat item dipilih
+                        panggilGroqAI();
 
                     } catch (e) {
                         console.error("Gagal mengekstrak elemen gambar: ", e);
@@ -161,26 +177,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (results.poseLandmarks) {
                 const lm = results.poseLandmarks;
-                const bahuKiri = lm[11]; const bahuKanan = lm[12];
-                const pinggangKiri = lm[23]; const pinggangKanan = lm[24];
-                const pinggangTengah = { x: (pinggangKiri.x + pinggangKanan.x)/2, y: (pinggangKiri.y + pinggangKanan.y)/2 };
+                
+                // AMANKAN KONDISI MIRROR: Balik koordinat X kiri dan kanan agar mengikuti layar webcam
+                const bahuKiri = lm[12];  // Dibalik dengan indeks 12
+                const bahuKanan = lm[11]; // Dibalik dengan indeks 11
+                const pinggangKiri = lm[24];
+                const pinggangKanan = lm[23];
+                
+                // Titik tengah absolut tubuh (Kunci utama anti-geser)
+                const bahuTengahX = (bahuKiri.x + bahuKanan.x) / 2;
+                const pinggangTengahX = (pinggangKiri.x + pinggangKanan.x) / 2;
+                const pinggangTengahY = (pinggangKiri.y + pinggangKanan.y) / 2;
 
                 const lebarBahuPixel = Math.abs(bahuKanan.x - bahuKiri.x) * canvasTop.width;
                 const tinggiTorsoPixel = Math.abs(pinggangKiri.y - bahuKiri.y) * canvasTop.height;
 
+                // ================================================================
+                // KONTROL PRESISI ATASAN (BAJU) - TETAP DI TENGAH DAN PAS
+                // ================================================================
                 if (activeShirtImg && activeShirtImg.complete) {
-                    const lebarBaju = lebarBahuPixel * 2.6; 
-                    const tinggiBaju = tinggiTorsoPixel * 1.7;
-                    const posX = ((bahuKiri.x + bahuKanan.x) / 2) * canvasTop.width - (lebarBaju / 2);
-                    const posY = bahuKiri.y * canvasTop.height - (tinggiBaju * 0.32); // Posisi pas leher tubuh
+                    const lebarBaju = lebarBahuPixel * 3.0; 
+                    const tinggiBaju = tinggiTorsoPixel * 2.1;
+                    
+                    // Mengunci X di tengah tubuh secara absolut (Anti-Minggir)
+                    const posX = bahuTengahX * canvasTop.width - (lebarBaju / 2);
+                    const posY = bahuKiri.y * canvasTop.height - (tinggiBaju * 0.24);
+                    
                     ctxTop.drawImage(activeShirtImg, posX, posY, lebarBaju, tinggiBaju);
                 }
 
+                // ================================================================
+                // KONTROL PRESISI BAWAHAN (CELANA) - LEBIH LEBAR & LEBIH TURUN 0.2
+                // ================================================================
                 if (activePantsImg && activePantsImg.complete) {
-                    const lebarCelana = lebarBahuPixel * 2.2;
-                    const tinggiCelana = tinggiTorsoPixel * 2.6;
-                    const posX = pinggangTengah.x * canvasBottom.width - (lebarCelana / 2);
-                    const posY = pinggangTengah.y * canvasBottom.height - (tinggiCelana * 0.25); // Posisi pas pinggang
+                    // Lebar 3.1 sudah pas banget, kita pertahankan
+                    const lebarCelana = lebarBahuPixel * 3.3;
+                    const tinggiCelana = tinggiTorsoPixel * 2.9;
+                    
+                    // Mengunci posisi X tepat di tengah pinggang
+                    const posX = pinggangTengahX * canvasBottom.width - (lebarCelana / 2);
+                    
+                    // KALIBRASI ULANG: Diubah dari 0.35 menjadi 0.12 agar celana turun pas di pinggang asli
+                    const posY = pinggangTengahY * canvasBottom.height - (tinggiCelana * 0.16);
+                    
                     ctxBottom.drawImage(activePantsImg, posX, posY, lebarCelana, tinggiCelana);
                 }
             }
@@ -216,9 +255,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // CAPTURE & PINDAHKAN OUTFIT KE DASHBOARD PLANNER LOG
+    // ================================================================
+    // HUBUNGKAN SINKRONISASI JEPRETAN MIX & MATCH KE PLANNER OOTD
+    // ================================================================
     btnCaptureFit?.addEventListener("click", () => {
         if (!isCameraOn) return;
 
+        // 1. Pengaman: Pastikan pengguna sudah memilih kedua pakaian sebelum menjepret
+        const shirtText = document.getElementById("status-shirt")?.textContent || "";
+        const pantsText = document.getElementById("status-pants")?.textContent || "";
+
+        if (shirtText.includes("Belum memilih") || pantsText.includes("Belum memilih") || !activeShirtImg || !activePantsImg) {
+            alert("⚠️ Lengkapi kombinasi Atasan dan Bawahan kamu terlebih dahulu sebelum menjepret!");
+            return;
+        }
+
+        // 2. Proses pembuatan gambar snapshot (untuk histori visual jika diperlukan)
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = video.videoWidth; tempCanvas.height = video.videoHeight;
         const tempCtx = tempCanvas.getContext("2d");
@@ -230,32 +282,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
         tempCtx.drawImage(canvasBottom, 0, 0);
         tempCtx.drawImage(canvasTop, 0, 0);
-
         const dataGambarOutfit = tempCanvas.toDataURL("image/jpeg");
-        let historiPlanner = JSON.parse(localStorage.getItem("pickfit_captured_outfits")) || [];
+
+        // 3. JALUR UTAMA: Simpan daftar URL gambar asli ke 'koleksiOutfit' untuk kalender Planner
+        let koleksiOutfit = JSON.parse(localStorage.getItem('koleksiOutfit')) || [];
         
+        const outfitBaruKePlanner = {
+            id: "outfit_" + Date.now(),
+            // Memasukkan array source gambar baju dan celana yang sedang aktif dipakai
+            items: [activeShirtImg.src, activePantsImg.src] 
+        };
+
+        koleksiOutfit.push(outfitBaruKePlanner);
+        localStorage.setItem('koleksiOutfit', JSON.stringify(koleksiOutfit));
+
+
+        // 4. JALUR CADANGAN: Pertahankan data snapshot lama untuk kebutuhan log histori/fitur lain jika ada
+        let historiPlanner = JSON.parse(localStorage.getItem("pickfit_captured_outfits")) || [];
         const packageOutfitBaru = {
             id: "fit_" + Date.now(),
             previewSnapshot: dataGambarOutfit,
-            namaAtasan: document.getElementById("status-shirt").textContent,
-            namaBawahan: document.getElementById("status-pants").textContent,
+            namaAtasan: shirtText,
+            namaBawahan: pantsText,
             tanggalJepret: new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
         };
-
         historiPlanner.unshift(packageOutfitBaru);
         localStorage.setItem("pickfit_captured_outfits", JSON.stringify(historiPlanner));
 
-        alert("📸 Outfit Mix & Match berhasil diambil dan disimpan ke database Planner!");
+        // 5. Beri notifikasi dan arahkan user langsung ke halaman Planner
+        alert("📸 Hasil jepretan kombinasi baju berhasil disimpan! Silakan pilih tanggal pada kalender Planner kamu.");
         window.location.href = "/planner";
-    });
-
-    document.getElementById("btn-reset-fit")?.addEventListener("click", () => {
-        activeShirtImg = null; activePantsImg = null;
-        document.getElementById("slot-shirt-img").innerHTML = `<i class="fa-solid fa-shirt"></i>`;
-        document.getElementById("slot-pants-img").innerHTML = `<i class="fa-solid fa-person-legs-reparations"></i>`;
-        document.getElementById("status-shirt").textContent = "Belum memilih atasan";
-        document.getElementById("status-pants").textContent = "Belum memilih bawahan";
-        ctxTop?.clearRect(0, 0, canvasTop.width, canvasTop.height);
-        ctxBottom?.clearRect(0, 0, canvasBottom.width, canvasBottom.height);
     });
 });

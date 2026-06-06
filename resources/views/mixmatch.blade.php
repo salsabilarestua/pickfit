@@ -28,7 +28,7 @@
             
             <div class="card-section camera-side">
                 <div class="section-header-text">
-                    <h2 class="title-serif"><i class="fa-solid fa-camera"></i> Multi-item Try-On <span>Camera</span></h2>
+                    <h2 class="title-serif"><i class="fa-solid fa-camera"></i>Try-On <span>Camera</span></h2>
                     <p class="subtitle">Arahkan kamera ke badan untuk mencoba kombinasi baju & celana sekaligus</p>
                 </div>
                 
@@ -54,19 +54,18 @@
 
             <div class="card-section control-side">
                 <div class="section-header-text">
-                    <h2 class="title-serif"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Outfit <span>Planner Pro</span></h2>
-                    <p class="subtitle">Pilih item pakaian di lemarimu untuk memicu analisa visual pencocokan gaya AI</p>
+                    <h2 class="title-serif"><i class="fa-solid fa-wand-magic-sparkles"></i> AI <span>Outfit</span></h2>
+                    <p class="subtitle">Pilih item pakaian di lemarimu untuk mulai Try-On</p>
                 </div>
 
                 <div class="closet-section">
                     <h3 class="panel-title">Pakaian di Lemari Kamu</h3>
-                    <div id="closet-items" class="closet-vertical-grid">
-                        </div>
+                    <div id="closet-items" class="closet-vertical-grid"></div>
                 </div>
 
                 <div class="status-section">
                     <div class="status-header-flex">
-                        <h3 class="panel-title">Status Try-On</h3>
+                        <h3 class="panel-title">Pakaian yang dipilih</h3>
                         <span id="btn-reset-fit" class="reset-link"><i class="fa-solid fa-rotate-left"></i> Reset</span>
                     </div>
                     <div class="status-flex-slots">
@@ -80,30 +79,38 @@
                         </div>
                     </div>
                 </div>
-
-                <div id="ai-planner-box" class="ai-detector-panel" style="display: none;">
-                    <div class="panel-header-ai">
-                        <h3><i class="fa-solid fa-microchip"></i> REAL-TIME GEMINI AI FASHION INSIGHT</h3>
+            </div> </div> <div id="ai-planner-box" class="ai-detector-panel-wide" style="display: none; margin-top: 25px;">
+            <div class="panel-header-ai">
+                <h3><i class="fa-solid fa-microchip"></i> AI Rekomendasi Warna & Kecocokan</h3>
+            </div>
+            
+            <div class="detector-body-wide">
+                <div class="color-meta-row" style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div class="dominant-color-row" style="display: flex; align-items: center; gap: 10px;">
+                        <span class="ai-section-sub-title" style="font-weight: 600;">Warna Dasar:</span>
+                        <div id="detected-color-indicator" class="color-circle-large"></div>
+                        <span class="color-name-text" id="detected-color-name" style="font-family: monospace; font-size: 14px;">#------</span>
                     </div>
                     
-                    <div class="detector-body">
-                        <div class="dominant-color-row" style="margin-bottom: 12px;">
-                            <span class="ai-section-sub-title">Warna Dasar:</span>
-                            <div id="detected-color-indicator" class="color-circle-large"></div>
-                            <span class="color-name-text" id="detected-color-name">#------</span>
-                        </div>
-
-                        <div id="recommended-colors-list" class="palette-output-row"></div>
-
-                        <div id="ai-text-tips-dynamic" class="ai-suggestion-paragraph-live">
-                            </div>
+                    <div class="palette-wrapper" style="display: flex; align-items: center; gap: 10px;">
+                        <span class="ai-section-sub-title" style="font-weight: 600;">Rekomendasi Palet:</span>
+                        <div id="recommended-colors-list" class="palette-output-row" style="display: flex; gap: 10px;"></div>
                     </div>
                 </div>
+
+                <hr style="border: 0; border-top: 1px dashed #e0e0e0; margin-bottom: 20px;">
+
+                <div id="ai-text-tips-dynamic" class="ai-suggestion-paragraph-live-wide">
+                    </div>
             </div>
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
+    <footer>
+        <div class="footer-logo">Pick<span>Fit</span></div>
+        <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
+    </footer>
+
+    </div> <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script src="{{ asset('js/mixmatch.js') }}"></script>

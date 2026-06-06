@@ -6,94 +6,81 @@ use Illuminate\Http\Request;
 
 class MixMatchController extends Controller
 {
-    public function index()
+    public function panggilGemini(Request $request) 
     {
-        // Return view tanpa membawa database karena data baju ada di localStorage user
-        return view('mixmatch');
-    } // Kurung kurawal index ditutup di sini
+        $atasan = $request->input('atasan');
+        $bawahan = $request->input('bawahan');
 
-    // Fungsi panggilGemini sekarang sudah aman di dalam Class
-    public function panggilGemini(\Illuminate\Http\Request $request)
-    {
-        $base64Image = $request->input('image');
-        $namaItem = $request->input('name');
-
-        if (!$base64Image) {
-            return response()->json(['error' => 'Data gambar tidak terbaca di backend.'], 400);
+        if (!$atasan || !$bawahan) {
+            return response()->json(['error' => 'Nama atasan atau bawahan tidak terdeteksi.'], 400);
         }
 
-        // PENTING: Deteksi & potong header base64 (baik data:image/png atau data:image/jpeg)
-        $posisiKoma = strpos($base64Image, ',');
-        if ($posisiKoma !== false) {
-            $cleanBase64 = substr($base64Image, $posisiKoma + 1);
-        } else {
-            $cleanBase64 = $base64Image;
-        }
+        $groqApiKey = "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";
+        $url = "https://api.groq.com/openai/v1/chat/completions";
 
-        // FIX UTAMA: Mengembalikan karakter '+' yang berubah menjadi spasi saat dikirim via JSON AJAX
-        $cleanBase64 = str_replace(' ', '+', $cleanBase64);
-
-        // Tentukan Mime Type gambar secara dinamis
-        $mimeType = "image/jpeg";
-        if (str_contains($base64Image, 'image/png')) $mimeType = "image/png";
-        if (str_contains($base64Image, 'image/webp')) $mimeType = "image/webp";
-
-        // API Key valid resmi milikmu
-        $apiKey = "AIzaSyDNj27dA9i7JJYSDS50quU7w2dIcHPlvJk";
-        $url = "https://generativelanguageresource.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" . $apiKey;
-
-        $promptText = "Kamu adalah seorang Fashion Stylist Expert profesional. 
-        Analisis foto pakaian asli buatan user yang bernama '{$namaItem}' ini. Berikan rekomendasi outfit yang sangat mendalam dan modis berdasarkan bentuk siluet potongan (cuttingan), bahan kain, dan warna aslinya.
+        // Instruksi fashion stylist expert
+        $promptText = "Kamu adalah seorang Fashion Stylist Expert profesional untuk anak muda. 
+        User aplikasi PickFit telah memilih perpaduan OOTD berikut di lemarinya:
+        - Pakaian Atasan: {$atasan}
+        - Pakaian Bawahan: {$bawahan}
+        
+        Berikan analisis keserasian (mix and match) dari kedua pakaian tersebut, lalu berikan rekomendasi pelengkap look yang sangat detail, modis, dan kekinian agar penampilan mereka maksimal.
         
         Tuliskan hasil analisismu langsung menggunakan format susunan tag HTML seperti ini agar rapi di halaman web:
         
-        <p><b>Analisis Model & Karakteristik:</b> (Tulis deskripsi detail pakaian ini berdasarkan foto, misalnya: kemeja oversized, celana cargo loose fit, bahan linen jatuh, atau kaos knit fitted, dll.)</p>
+        <p><b>💡 Analisis Kombinasi Look:</b> (Jelaskan secara detail nuansa atau vibe dari perpaduan antara '{$atasan}' dan '{$bawahan}' ini, apakah kesannya kasual, streetwear, formal, atau formal santai, serta bagaimana keserasian potongannya)</p>
+        
         <ul>
-           <li><b>Rekomendasi Bawahan/Atasan:</b> (Sebutkan jenis pasangan baju/celana yang cocok, tipe cuttingan shape-nya seperti apa, dan warna yang kontras seimbang)</li>
-           <li><b>Aksesori Pendukung:</b> (Rekomendasikan tas, kacamata hitam, jam tangan, kalung, atau topi yang sesuai tema look-nya. DILARANG KERAS menyebutkan kerudung, hijab, jilbab, atau penutup kepala religi apapun!)</li>
-           <li><b>Pilihan Alas Kaki (Sepatu):</b> (Rekomendasikan jenis sepatu seperti loafers formal, sneakers kasual chunky, flat shoes, atau boots beserta opsi warnanya)</li>
+           <li><b>👟 Pilihan Alas Kaki (Sepatu):</b> (Rekomendasikan secara spesifik jenis sepatu yang paling cocok beserta opsi warnanya, misalnya: Sneakers chunky putih, Dr. Martens boots hitam, loafers kulit cokelat, dll., jelaskan alasannya kenapa cocok dengan celana tersebut)</li>
+           <li><b>🎒 Aksesoris Pendukung:</b> (Sebutkan jam tangan tipe apa, kacamata model apa, jenis tas seperti slingbag/backpack/tote bag, kalung/gelang, atau topi yang sesuai tema look ini untuk mendongkrak penampilan. DILARANG KERAS menyebutkan kerudung, hijab, jilbab, atau penutup kepala religi apapun!)</li>
+           <li><b>🧥 Outer Tambahan (Opsional):</b> (Berikan saran jika look ini akan semakin keren kalau ditambah outer seperti jaket denim, kemeja flanel luar, blazer, atau cardigan beserta warnanya)</li>
         </ul>
         
-        Gunakan gaya bahasa santai, informatif, modis, dan mengesankan untuk anak muda. Jangan sebutkan kata hijab/kerudung/muslimah sama sekali.";
+        Gunakan gaya bahasa santai, ekspresif, informatif, modis, dan mengesankan untuk anak muda. Jangan sebutkan kata hijab/kerudung/muslimah sama sekali.";
+
+        $payload = [
+            'model' => 'llama-3.3-70b-versatile', 
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => $promptText
+                ]
+            ],
+            'temperature' => 0.7
+        ];
 
         try {
-            // Kirim request ke Google Gemini AI
-            $response = \Illuminate\Support\Facades\Http::withHeaders([
-                'Content-Type' => 'application/json'
-            ])->post($url, [
-                'contents' => [
-                    [
-                        'parts' => [
-                            ['text' => $promptText],
-                            [
-                                'inlineData' => [
-                                    'mimeType' => $mimeType,
-                                    'data' => $cleanBase64
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $groqApiKey
             ]);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); 
 
-            $data = $response->json();
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
 
-            // Jika Google membalas dengan status error, tangkap pesannya di sini
-            if (isset($data['error'])) {
-                return response()->json(['error' => 'Respon Google: ' . $data['error']['message']], 400);
+            if ($httpCode !== 200) {
+                $errDetail = json_decode($response, true);
+                $msg = isset($errDetail['error']['message']) ? $errDetail['error']['message'] : 'Status ' . $httpCode;
+                return response()->json(['error' => 'Respon Groq API: ' . $msg], 400);
             }
 
-            if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
-                $hasilTeksAI = $data['candidates'][0]['content']['parts'][0]['text'];
-                // Bersihkan penutup markdown html bawaan LLM jika ada
-                $hasilTeksAI = str_replace(['```html', '```'], '', $hasilTeksAI);
+            $data = json_decode($response, true);
+
+            if (isset($data['choices'][0]['message']['content'])) {
+                $hasilTeksAI = $data['choices'][0]['message']['content'];
                 return response()->json(['text' => $hasilTeksAI]);
             }
 
-            return response()->json(['error' => 'Google mengembalikan respon kosong.'], 500);
+            return response()->json(['error' => 'Struktur respon dari AI kosong.'], 500);
 
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Gagal koneksi ke server Google: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Terjadi kendala internal server: ' . $e->getMessage()], 500);
         }
     }
-} // Tanda penutup class MixMatchController sekarang berada di paling akhir file
+}

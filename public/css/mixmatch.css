@@ -226,3 +226,54 @@ body {
     50% { opacity: 1; }
     100% { opacity: 0.5; }
 }
+
+/* Styling Kotak AI Baru yang Melebar */
+.ai-detector-panel-wide {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(89, 88, 67, 0.05); 
+    border: none; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.panel-header-ai h3 {
+    margin: 0 0 20px 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-header-ai h3 i {
+    color: #c9a38d; 
+}
+
+/* Penampung Teks Rekomendasi Utama dari Groq AI */
+.ai-suggestion-paragraph-live-wide {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #4a4a4a;
+}
+
+/* Opsional: Styling rapi untuk list html bawaan dari respon AI */
+.ai-suggestion-paragraph-live-wide ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.ai-suggestion-paragraph-live-wide li {
+    margin-bottom: 8px;
+}
+
+footer { 
+    text-align: center; 
+    padding: 40px; 
+    color: #aaa; 
+    font-size: 12px; 
+}

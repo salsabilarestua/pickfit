@@ -1,15 +1,7 @@
 let date = new Date();
 let currentMonth = date.getMonth();
 let currentYear = date.getFullYear();
-let plannerData = {};
-
-(window.userPlans || []).forEach(plan => {
-    const planDate = new Date(plan.tanggal);
-
-    const key = `${planDate.getFullYear()}-${planDate.getMonth()}-${planDate.getDate()}`;
-
-    plannerData[key] = plan.outfit.items;
-});
+let plannerData = JSON.parse(localStorage.getItem('plannerData')) || {};
 const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 let selectedDateKey = null;
 let tempSelection = null;
@@ -34,6 +26,11 @@ function renderCalendar() {
         dayEl.className = `day ${hasOutfit}`;
         dayEl.innerText = d;
         
+        // Mempertahankan status 'active' jika tanggal tersebut sedang dipilih
+        if (selectedDateKey === dateKey) {
+            dayEl.classList.add('active');
+        }
+        
         dayEl.onclick = function() {
             document.querySelectorAll('.day').forEach(el => el.classList.remove('active'));
             this.classList.add('active');
@@ -51,123 +48,55 @@ function selectDate(day, key) {
     
     if (plannerData[key] && Array.isArray(plannerData[key])) {
         const imagesHtml = plannerData[key].map(src => 
-            `<img src="${src}" style="width: 70px; height: 70px; object-fit: contain; margin: 5px; background: white; border-radius: 10px; border: 1px solid #eee; padding: 5px;">`
+            `<img src="${src}" style="width: 85px; height: 85px; object-fit: contain; margin: 5px; background: white; border-radius: 12px; border: 1px solid #eeece8; padding: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">`
         ).join("");
-        preview.innerHTML = `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; padding: 10px;">${imagesHtml}</div>`;
+        preview.innerHTML = `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 10px;">${imagesHtml}</div>`;
     } else {
         preview.innerHTML = `<p style="color: #ccc; font-size: 0.85rem;">Belum ada jadwal outfit</p>`;
     }
 }
 
 document.getElementById('addOutfitBtn').onclick = () => {
-    if (!selectedDateKey) {
-        return alert("Pilih tanggal di kalender dulu!");
-    }
-
+    if (!selectedDateKey) return alert("Pilih tanggal di kalender dulu!");
     const modal = document.getElementById('modalKoleksi');
     const daftarKoleksi = document.getElementById('daftarKoleksi');
-
-    const koleksiOutfit = window.userOutfits || [];
+    const koleksi = JSON.parse(localStorage.getItem('koleksiOutfit')) || [];
 
     modal.style.display = 'flex';
     daftarKoleksi.innerHTML = "";
 
-    if (koleksiOutfit.length === 0) {
-        daftarKoleksi.innerHTML = `
-            <p style='grid-column: span 3; padding: 20px; color: #999;'>
-                Koleksi kosong. Buat dulu di Mix & Match!
-            </p>
-        `;
+    if (koleksi.length === 0) {
+        daftarKoleksi.innerHTML = "<p style='grid-column: span 3; padding: 20px; color: #999;'>Koleksi kosong. Buat dulu di Mix & Match!</p>";
         return;
     }
 
-    koleksiOutfit.forEach(outfit => {
+    koleksi.forEach(outfit => {
         const card = document.createElement('div');
-
         card.className = "koleksi-item-modal";
-
-        const imgsHtml = outfit.items
-            .map(
-                url =>
-                    `<img src="${url}" style="width:35px; height:35px; object-fit:contain;">`
-            )
-            .join("");
-
-        card.innerHTML = `
-            <div class="mini-preview" style="display:flex; gap:3px; justify-content:center;">
-                ${imgsHtml}
-            </div>
-        `;
-
+        const imgsHtml = outfit.items.map(url => `<img src="${url}" style="width:45px; height:45px; object-fit:contain;">`).join("");
+        card.innerHTML = `<div class="mini-preview" style="display:flex; gap:5px; justify-content:center; flex-wrap:wrap;">${imgsHtml}</div>`;
+        
         card.onclick = () => {
-            tempSelection = outfit;
-
-            const previewHtml = outfit.items
-                .map(
-                    src =>
-                        `<img src="${src}" style="width:60px; height:60px; object-fit:contain; margin:5px;">`
-                )
-                .join("");
-
-            document.getElementById('outfitPreview').innerHTML = `
-                <div style="display:flex; flex-wrap:wrap; gap:5px; justify-content:center;">
-                    ${previewHtml}
-                </div>
-            `;
-
+            tempSelection = outfit.items;
+            const previewHtml = tempSelection.map(src => `<img src="${src}" style="width:85px; height:85px; object-fit:contain; margin:5px; background:white; border-radius:12px; border:1px solid #eeece8; padding:6px;">`).join("");
+            document.getElementById('outfitPreview').innerHTML = `<div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">${previewHtml}</div>`;
             tutupModal();
         };
-
         daftarKoleksi.appendChild(card);
     });
 };
 
-document.getElementById('savePlannerBtn').onclick = async () => {
-    if (!selectedDateKey) {
-        return alert("Pilih tanggal di kalender dulu!");
-    }
+document.getElementById('savePlannerBtn').onclick = () => {
+    if (!selectedDateKey) return alert("Pilih tanggal di kalender dulu!");
+    if (!tempSelection) return alert("Pilih outfit dari koleksi dulu!");
 
-    if (!tempSelection) {
-        return alert("Pilih outfit dari koleksi dulu!");
-    }
+    plannerData[selectedDateKey] = tempSelection;
+    localStorage.setItem('plannerData', JSON.stringify(plannerData));
 
-    try {
-        const response = await fetch('/planner/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute('content'),
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                tanggal: selectedDateKey,
-                outfit_id: tempSelection.id
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            alert("Berhasil disimpan ke kalender!");
-
-            plannerData[selectedDateKey] = tempSelection.items;
-
-            renderCalendar();
-
-            tampilkanSemuaRencana();
-
-            tempSelection = null;
-        } else {
-            alert(data.message || "Gagal menyimpan planner.");
-        }
-
-    } catch (error) {
-        console.error("Planner save error:", error);
-
-        alert("Terjadi error saat menyimpan planner.");
-    }
+    alert("Berhasil disimpan ke kalender!");
+    renderCalendar();
+    tampilkanSemuaRencana();
+    tempSelection = null;
 };
 
 document.getElementById('prevMonth').onclick = () => {
@@ -182,58 +111,19 @@ document.getElementById('nextMonth').onclick = () => {
     renderCalendar();
 };
 
-document.getElementById('clearOutfitBtn').onclick = async () => {
-    if (!selectedDateKey || !plannerData[selectedDateKey]) {
-        return alert("Pilih tanggal yang ada jadwalnya untuk dihapus.");
-    }
-
-    if (!confirm("Hapus jadwal untuk tanggal ini?")) {
-        return;
-    }
-
-    try {
-        const response = await fetch('/planner/delete', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document
-                    .querySelector('meta[name="csrf-token"]')
-                    .getAttribute('content'),
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                tanggal: selectedDateKey
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
+document.getElementById('clearOutfitBtn').onclick = () => {
+    if (selectedDateKey && plannerData[selectedDateKey]) {
+        if(confirm("Hapus jadwal untuk tanggal ini?")) {
+            const tempDay = selectedDateKey.split('-')[2];
             delete plannerData[selectedDateKey];
-
+            localStorage.setItem('plannerData', JSON.stringify(plannerData));
+            
             renderCalendar();
-
             tampilkanSemuaRencana();
-
-            const preview = document.getElementById('outfitPreview');
-
-            if (preview) {
-                preview.innerHTML = `
-                    <p style="color: #ccc; font-size: 0.85rem;">
-                        Belum ada jadwal outfit
-                    </p>
-                `;
-            }
-
-            alert("Jadwal berhasil dihapus!");
-        } else {
-            alert(data.message || "Gagal menghapus jadwal.");
+            selectDate(tempDay, selectedDateKey);
         }
-
-    } catch (error) {
-        console.error("Delete planner error:", error);
-
-        alert("Terjadi error saat menghapus jadwal.");
+    } else {
+        alert("Pilih tanggal yang ada jadwalnya untuk dihapus.");
     }
 };
 
@@ -248,12 +138,18 @@ function tampilkanSemuaRencana() {
         const dayLabel = parts[2] + " " + monthNames[parts[1]];
         
         const card = document.createElement('div');
-        card.style = "background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align:center;";
-        const imgsHtml = item.map(src => `<img src="${src}" style="width:40px; margin:2px;">`).join("");
+        card.style.background = "white";
+        card.style.padding = "20px";
+        card.style.borderRadius = "20px";
+        card.style.boxShadow = "0 8px 20px rgba(89,88,67,0.03)";
+        card.style.textAlign = "center";
+        card.style.border = "1px solid #f0edea";
+        
+        const imgsHtml = item.map(src => `<img src="${src}" style="width: 50px; height: 50px; object-fit: contain; margin: 3px; background: #faf9f6; padding: 4px; border-radius: 8px; border: 1px solid #f0edea;">`).join("");
         
         card.innerHTML = `
-            <p style="font-weight:600; font-size:14px; margin-bottom:10px;">${dayLabel}</p>
-            <div style="display:flex; justify-content:center; gap:5px;">${imgsHtml}</div>
+            <p style="font-weight:600; font-size:14px; margin-bottom:12px; color: #333;">${dayLabel}</p>
+            <div style="display:flex; justify-content:center; flex-wrap: wrap; gap:4px;">${imgsHtml}</div>
         `;
         listRencana.appendChild(card);
     });
