@@ -561,8 +561,9 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
 .btn-explore-color:active { transform: translateY(-1px); }
 
 /* Footer layout */
-footer {
-    padding: 50px 8%;
-    background-color: var(--neutral);
-    text-align: center;
+footer { 
+    text-align: center; 
+    padding: 40px; 
+    color: #aaa; 
+    font-size: 12px; 
 }
