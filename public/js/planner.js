@@ -6,6 +6,7 @@ const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Jul
 let selectedDateKey = null;
 let tempSelection = null;
 
+// Render kalender
 function renderCalendar() {
     const daysContainer = document.getElementById('calendarDays');
     const monthDisplay = document.getElementById('monthDisplay');
@@ -26,7 +27,7 @@ function renderCalendar() {
         dayEl.className = `day ${hasOutfit}`;
         dayEl.innerText = d;
         
-        // Mempertahankan status 'active' jika tanggal tersebut sedang dipilih
+        // Status aktif
         if (selectedDateKey === dateKey) {
             dayEl.classList.add('active');
         }
@@ -40,6 +41,7 @@ function renderCalendar() {
     }
 }
 
+// Pilih tanggal
 function selectDate(day, key) {
     selectedDateKey = key;
     tempSelection = null; 
@@ -56,6 +58,7 @@ function selectDate(day, key) {
     }
 }
 
+// Buka modal koleksi
 document.getElementById('addOutfitBtn').onclick = () => {
     if (!selectedDateKey) return alert("Pilih tanggal di kalender dulu!");
     const modal = document.getElementById('modalKoleksi');
@@ -86,6 +89,7 @@ document.getElementById('addOutfitBtn').onclick = () => {
     });
 };
 
+// Simpan ke kalender
 document.getElementById('savePlannerBtn').onclick = () => {
     if (!selectedDateKey) return alert("Pilih tanggal di kalender dulu!");
     if (!tempSelection) return alert("Pilih outfit dari koleksi dulu!");
@@ -99,18 +103,21 @@ document.getElementById('savePlannerBtn').onclick = () => {
     tempSelection = null;
 };
 
+// Bulan sebelumnya
 document.getElementById('prevMonth').onclick = () => {
     currentMonth--;
     if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     renderCalendar();
 };
 
+// Bulan berikutnya
 document.getElementById('nextMonth').onclick = () => {
     currentMonth++;
     if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     renderCalendar();
 };
 
+// Hapus jadwal outfit
 document.getElementById('clearOutfitBtn').onclick = () => {
     if (selectedDateKey && plannerData[selectedDateKey]) {
         if(confirm("Hapus jadwal untuk tanggal ini?")) {
@@ -127,6 +134,7 @@ document.getElementById('clearOutfitBtn').onclick = () => {
     }
 };
 
+// Tampilkan daftar semua rencana
 function tampilkanSemuaRencana() {
     const listRencana = document.getElementById('listRencana');
     if (!listRencana) return;
@@ -155,13 +163,16 @@ function tampilkanSemuaRencana() {
     });
 }
 
+// Tutup modal
 function tutupModal() {
     document.getElementById('modalKoleksi').style.display = 'none';
 }
 
+// Klik area luar modal
 window.onclick = (event) => {
     if (event.target == document.getElementById('modalKoleksi')) tutupModal();
 };
 
+// Inisialisasi awal
 renderCalendar();
 tampilkanSemuaRencana();

@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +10,18 @@
 <body class="profile-page">
 
     <nav id="navbar">
-        <a href="/" class="logo">PICK<span>FIT</span></a>
+        <a href="/" class="logo">Pick<span>Fit</span></a>
         <div class="nav-container" id="nav-container">
             <ul class="nav-links">
-                <li><a href="/">Home</a></li>
+                <li><a href="/">BERANDA</a></li>
+                <li><a href="/lemari">LEMARI</a></li>
+                <li><a href="/mixmatch">MIX & MATCH</a></li>
+                <li><a href="/planner">PLANNER</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="profile-wrapper">
+    <main class="profile-wrapper" style="margin-top: 120px;">
         <div class="profile-card">
             <div class="profile-left">
                 <div class="profile-img-container">
@@ -43,3 +48,4 @@
 
     <script src="{{ asset('js/script.js') }}"></script>
 </body>
+</html>

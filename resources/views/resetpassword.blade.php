@@ -12,8 +12,7 @@
         <div class="auth-card">
             <a href="/" class="btn-home">&larr; Home</a>
             
-            <h2 class="serif">Lupa <span class="brand-color">Password?</span></h2>
-            
+            <h2 class="serif">Ubah <span class="brand-color">Password</span></h2>
             <p class="auth-subtitle">Ubah Password untuk Mengakses Akun</p>
             
             <form id="form-update-password" action="{{ route('password.update') }}" method="POST">

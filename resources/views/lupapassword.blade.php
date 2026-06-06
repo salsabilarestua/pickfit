@@ -13,7 +13,6 @@
             <a href="/" class="btn-home">&larr; Home</a>
             
             <h2 class="serif">Lupa <span class="brand-color">Password?</span></h2>
-            
             <p class="auth-subtitle">Masukkan Email Pemulihan</p>
             
             <form id="form-lupa-password" action="{{ route('password.email') }}" method="POST">

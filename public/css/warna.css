@@ -1,3 +1,9 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 :root {
     --grey-dark: #1a1a1a;
     --orange-accent: #c97c5d;
@@ -31,8 +37,9 @@ body {
 
 .palette-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
     gap: 30px;
+    align-items: start;
 }
 
 .palette-card {
@@ -62,7 +69,7 @@ body {
 }
 
 .color-box:hover {
-    flex: 2.5; /* Signifier bahwa elemen ini interaktif */
+    flex: 2.5; 
 }
 
 .palette-info {
@@ -75,7 +82,7 @@ body {
     margin-bottom: 8px;
 }
 
-/* Feedback Message Styling */
+/* feedback message */
 #feedback-message {
     margin-top: 30px;
     padding: 15px;
@@ -91,104 +98,108 @@ body {
     pointer-events: none;
 }
 
-/* Navbar */
-#navbar * {
-    box-sizing: border-box;
-}
-
+/* navbar  */
 #navbar {
-    background: #ffffff;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    height: 70px; 
-    display: block;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0 8% !important;
+    background: #ffffff !important;
+    position: fixed !important;
+    top: 0 !important; 
+    left: 0 !important;
+    width: 100% !important;
+    height: 70px !important;
+    z-index: 1000 !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
 }
 
 .nav-container {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    height: 100%;
-    max-width: 100%;
-    padding: 0 8%;     
-    margin: 0 auto;
+    display: contents !important;
 }
 
 .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #333 !important;
-    text-decoration: none;
-    white-space: nowrap;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    color: #333333 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
 }
 
-.logo span { color: #c9a38d; }
+.logo span { 
+    color: #c9a38d !important; 
+}
 
 .nav-links {
-    display: flex;
-    list-style: none;
-    gap: 30px;
-    margin: 0;
-    padding: 0;
-    align-items: center;
+    display: flex !important;
+    list-style: none !important;
+    gap: 30px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-items: center !important;
 }
 
 .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: 0.3s;
+    text-decoration: none !important;
+    color: #333333 !important;
+    font-size: 0.85rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    transition: 0.3s !important;
 }
 
-.nav-links a.active, .nav-links a:hover { color: #c9a38d; }
+.nav-links a.active, 
+.nav-links a:hover {
+    color: #c9a38d !important;
+}
 
-/* HAMBURGER (Mobile Only) */
 .menu-toggle {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-    gap: 4px;
+    display: none !important;
 }
 
-.menu-toggle span {
-    width: 25px;
-    height: 3px;
-    background: #333;
-    border-radius: 2px;
-}
-
-/* RESPONSIVE MOBILE */
+/* responsif mobile */
 @media screen and (max-width: 992px) {
-    .nav-container {
-        padding: 0 5%; 
+    #navbar {
+        flex-direction: column !important;
+        padding: 0.8rem 5% !important;
+        gap: 10px !important;
+        height: auto !important;
     }
 
-    .menu-toggle {
-        display: flex; 
+    .nav-container {
+        display: flex !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        justify-content: flex-start !important;
+        padding: 5px 0 10px !important;
+    }
+
+    .nav-container::-webkit-scrollbar {
+        display: none !important;
     }
 
     .nav-links {
-        position: fixed;
-        top: 70px;
-        right: -100%; 
-        background: #ffffff;
-        width: 100%;
-        height: 100vh;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding-top: 50px;
-        gap: 30px;
-        transition: 0.3s ease-in-out;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+        gap: 15px !important;
+        padding: 0 10px !important;
     }
 
-    .nav-links.active {
-        right: 0;
+    .nav-links a {
+        font-size: 0.75rem !important;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .palette-grid {
+        grid-template-columns: 1fr; 
+    }
+}
+
+/* footer */
+footer { 
+    text-align: center; 
+    padding: 40px; 
+    color: #aaa; 
+    font-size: 12px; 
 }

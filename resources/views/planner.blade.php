@@ -12,20 +12,16 @@
     <nav id="navbar">
         <a href="/" class="logo">Pick<span>Fit</span></a>
         <ul class="nav-links">
-            <li><a href="/">Beranda</a></li>
-            <li><a href="/lemari">Lemari</a></li>
-            <li><a href="/mixmatch">Mix & Match</a></li>
-            <li><a href="/planner" class="active">Planner</a></li>
+            <li><a href="/">BERANDA</a></li>
+            <li><a href="/lemari">LEMARI</a></li>
+            <li><a href="/mixmatch">MIX & MATCH</a></li>
+            <li><a href="/planner" class="active">PLANNER</a></li>
         </ul>
     </nav>
 
-<div class="planner-container">
-    </div>
-
-    <div class="planner-container">
+    <div class="planner-container" style="margin-top: 120px;">
         <div class="planner-header">
             <h2 class="section-title">Outfit Calendar</h2>
-            <p class="subtitle">Atur OOTD Harianmu</p>
         </div>
 
         <div class="calendar-wrapper">
@@ -52,9 +48,7 @@
                     </div>
                     <div class="action-buttons">
                         <button class="btn-black" id="addOutfitBtn">Pilih dari Koleksi</button>
-                        
                         <button id="savePlannerBtn" style="background: #28a745; color: white; width: 100%; padding: 12px; border-radius: 50px; border: none; font-weight: 600; margin-top: 10px; cursor: pointer;">Simpan ke Kalender</button>
-                        
                         <button class="btn-delete-plan" id="clearOutfitBtn">Hapus Jadwal</button>
                     </div>
                 </div>
@@ -75,6 +69,10 @@
         </div>
     </div>
 
+    <footer>
+        <div class="footer-logo">Pick<span>Fit</span></div>
+        <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
+    </footer>
     <script src="{{ asset('js/planner.js') }}"></script>
 </body>
 </html>

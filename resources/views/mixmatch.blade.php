@@ -11,19 +11,24 @@
 </head>
 <body class="mixmatch-page">
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">Pick<span style="color:#c9a38d;">Fit</span></a>
+    <nav id="navbar">
+        <a href="/" class="logo">Pick<span>Fit</span></a>
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-container" id="nav-container">
             <ul class="nav-links">
-                <li><a href="/">Beranda</a></li>
-                <li><a href="/lemari">Lemari</a></li>
-                <li><a href="/mixmatch" class="active">Mix & Match</a></li>
-                <li><a href="/planner">Planner</a></li>
+                <li><a href="/">BERANDA</a></li>
+                <li><a href="/lemari">LEMARI</a></li>
+                <li><a href="/mixmatch" class="active">MIX & MATCH</a></li>
+                <li><a href="/planner">PLANNER</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container-mixmatch">
+    <div class="container-mixmatch" style="margin-top: 120px;">
         <div class="grid-mixmatch">
             
             <div class="card-section camera-side">
@@ -79,9 +84,12 @@
                         </div>
                     </div>
                 </div>
-            </div> </div> <div id="ai-planner-box" class="ai-detector-panel-wide" style="display: none; margin-top: 25px;">
+            </div> 
+        </div> 
+
+        <div id="ai-planner-box" class="ai-detector-panel-wide" style="display: none; margin-top: 25px;">
             <div class="panel-header-ai">
-                <h3><i class="fa-solid fa-microchip"></i> AI Rekomendasi Warna & Kecocokan</h3>
+                <h3><i class="fa-solid fa-microchip"></i> Groq AI Rekomendasi Warna & Kecocokan</h3>
             </div>
             
             <div class="detector-body-wide">
@@ -100,17 +108,17 @@
 
                 <hr style="border: 0; border-top: 1px dashed #e0e0e0; margin-bottom: 20px;">
 
-                <div id="ai-text-tips-dynamic" class="ai-suggestion-paragraph-live-wide">
-                    </div>
+                <div id="ai-text-tips-dynamic" class="ai-suggestion-paragraph-live-wide"></div>
             </div>
         </div>
 
-    <footer>
-        <div class="footer-logo">Pick<span>Fit</span></div>
-        <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
-    </footer>
+        <footer>
+            <div class="footer-logo">Pick<span>Fit</span></div>
+            <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
+        </footer>
+    </div> 
 
-    </div> <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <script src="{{ asset('js/mixmatch.js') }}"></script>

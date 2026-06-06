@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +13,6 @@
             <a href="/" class="btn-home">&larr; Home</a>
             
             <h2 class="serif">Masuk <span class="brand-color">PickFit</span></h2>
-            
             <p class="auth-subtitle">Welcome Back</p>
             
             <form id="form-login" action="/?login=true" method="GET">
@@ -30,3 +31,4 @@
 
     <script src="{{ asset('js/script.js') }}"></script>
 </body>
+</html>

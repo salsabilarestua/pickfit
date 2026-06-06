@@ -17,8 +17,6 @@ class MixMatchController extends Controller
 
         $groqApiKey = "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";
         $url = "https://api.groq.com/openai/v1/chat/completions";
-
-        // Instruksi fashion stylist expert
         $promptText = "Kamu adalah seorang Fashion Stylist Expert profesional untuk anak muda. 
         User aplikasi PickFit telah memilih perpaduan OOTD berikut di lemarinya:
         - Pakaian Atasan: {$atasan}

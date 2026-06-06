@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,10 +18,10 @@
         </div>
         <div class="nav-container" id="nav-container">
             <ul class="nav-links">
-                <li><a href="/">Beranda</a></li>
-                <li><a href="/lemari" class="active">Lemari</a></li>
-                <li><a href="/mixmatch">Mix & Match</a></li>
-                <li><a href="/planner">Planner</a></li>
+                <li><a href="/">BERANDA</a></li>
+                <li><a href="/lemari" class="active">LEMARI</a></li>
+                <li><a href="/mixmatch">MIX & MATCH</a></li>
+                <li><a href="/planner">PLANNER</a></li>
             </ul>
         </div>
     </nav>
@@ -30,13 +32,11 @@
         <div class="auth-card" style="margin: 0 auto 50px auto; max-width: 500px;">
             <h3>Tambah Koleksi Baru</h3>
             <input type="text" id="nama-baju" placeholder="Nama Baju (ex: Kaos Hitam)">
-
             <input type="file" id="foto-baju" accept="image/*" style="padding: 10px 0;">
             <button id="btn-tambah" class="btn-black" style="width: 100%; margin-top: 10px;">UNGGAH KE LEMARI</button>
         </div>
 
-        <div id="grid-lemari">
-            </div>
+        <div id="grid-lemari"></div>
     </section>
 
     <footer>
@@ -46,3 +46,4 @@
 
     <script src="{{ asset('js/lemari.js') }}"></script>
 </body>
+</html>

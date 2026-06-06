@@ -1,23 +1,23 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PickFit - Rekomendasi Warna</title>
-    <link rel="stylesheet" href="{{ asset('css/warna.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/warna.css') }}">
 </head>
 <body>
 
     <nav id="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">Pick<span>Fit</span></a>
-            
-            <div class="menu-toggle" id="mobile-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-
-            <ul class="nav-links" id="nav-list">
+        <a href="/" class="logo">Pick<span>Fit</span></a>
+        <div class="menu-toggle" id="mobile-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-container" id="nav-container">
+            <ul class="nav-links">
                 <li><a href="/">BERANDA</a></li>
                 <li><a href="/lemari">LEMARI</a></li>
                 <li><a href="/mixmatch">MIX & MATCH</a></li>
@@ -26,7 +26,7 @@
         </div>
     </nav>
 
-    <section class="container" style="margin-top: 100px;">
+    <section class="container" style="margin-top: 120px;">
         <h2 class="section-title">Rekomendasi Palet Warna</h2>
     
         <div class="palette-grid">
@@ -73,5 +73,12 @@
         <div id="feedback-message" class="hidden"></div>
     </section>
 
+    <footer>
+        <div class="footer-logo">Pick<span>Fit</span></div>
+        <p>&copy; 2026 Pick Your Outfit by Group Localhost</p>
+    </footer>
+
+    <script src="{{ asset('js/script.js') }}"></script>
     <script src="{{ asset('js/warna.js') }}"></script>
 </body>
+</html>

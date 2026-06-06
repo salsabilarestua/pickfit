@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,7 +84,6 @@
     <section class="color-section">
         <div class="color-header">
             <h2 class="section-title" style="margin-top: 10px; margin-bottom: 10px;">Eksplorasi Warna</h2>
-            <p class="color-subtitle">Pilih palet warna yang sesuai dengan *skin tone* dan *mood* outfit harianmu.</p>
         </div>
 
         <div class="color-preview-grid">
@@ -138,3 +139,4 @@
 
     <script src="{{ asset('js/script.js') }}"></script>
 </body>
+</html>

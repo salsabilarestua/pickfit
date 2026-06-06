@@ -1,6 +1,4 @@
-/* ==========================================================================
-   RESET & BASE STYLES
-   ========================================================================== */
+/* reset & base theme */
 * { 
     margin: 0; 
     padding: 0; 
@@ -14,71 +12,67 @@ body {
     overflow-x: hidden;
 }
 
-/* ==========================================================================
-   NAVBAR
-   ========================================================================== */
+/* navbar */
 #navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 8%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    padding: 0.8rem 8%;
+    background: #ffffff;
     position: fixed;
     top: 0; 
+    left: 0;
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(89, 88, 67, 0.04);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.6rem !important;
     font-weight: 700;
-    text-decoration: none;
-    color: #333;
+    color: #333333 !important;
+    text-decoration: none !important;
 }
 
 .logo span { 
-    color: #c9a38d; 
+    color: #c9a38d !important; 
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
 }
 
 .nav-links { 
-    display: flex; 
-    list-style: none; 
-    gap: 25px; 
+    display: flex !important; 
+    list-style: none !important; 
+    gap: 20px; 
 }
 
 .nav-links a { 
-    text-decoration: none; 
-    color: #555555; 
+    text-decoration: none !important; 
+    color: #333333; 
     font-weight: 600; 
     font-size: 0.85rem; 
     text-transform: uppercase; 
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
     white-space: nowrap;
 }
 
 .nav-links a.active, .nav-links a:hover { 
-    color: #c9a38d; 
+    color: #c9a38d !important; 
 }
 
-/* ==========================================================================
-   PLANNER STRUCTURE
-   ========================================================================== */
+.menu-toggle {
+    display: none !important;
+}
+
+/* planner structure */
 .planner-container { 
-    /* 1. Amankan jarak atas dari navbar fixed (cukup 90px - 100px saja) */
-    padding: 100px 6% 40px !important; 
-    
-    /* 2. Bersihkan margin bawaan yang membuat konten melorot */
+    padding: 140px 6% 40px !important; 
     margin: 0 auto !important; 
-    
-    /* 3. PENGAMAN UTAMA: Pastikan TIDAK ADA paksaan tinggi layar penuh */
     height: auto !important;
     min-height: 0 !important;
-    
-    /* 4. Reset flex alignment bawaan jika ada */
     display: block !important; 
     max-width: 1400px;
     box-sizing: border-box;
@@ -109,33 +103,23 @@ body {
     font-size: 2.2rem; 
 }
 
+/* kotak kalender */
 .calendar-wrapper {
     display: flex;
     gap: 35px;
-    align-items: flex-start;
-}
-
-/* ==========================================================================
-   KOTAK KALENDER
-   ========================================================================== */
-.calendar-wrapper {
-    display: flex;
-    gap: 35px;
-    align-items: flex-start; /* Memastikan konten kalender dan detail langsung nempel di atas */
+    align-items: flex-start; 
     width: 100%;
 }
 
-   .calendar-box {
+.calendar-box {
     flex: 1.8;
     background: #ffffff;
     padding: 35px;
     border-radius: 24px;
     box-shadow: 0 10px 35px rgba(89, 88, 67, 0.04);
     border: 1px solid rgba(240, 237, 234, 0.7);
-    
-    /* Tambahkan baris di bawah ini untuk mengunci tinggi agar tidak ketarik ke bawah */
     height: auto; 
-    display: block; /* Pastikan tidak menggunakan flex yang salah arah */
+    display: block; 
 }
 
 .calendar-nav {
@@ -197,7 +181,7 @@ body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 12px;
-    margin-top: 15px; /* Memberi jarak aman setelah header hari */
+    margin-top: 15px;
 }
 
 .day {
@@ -255,9 +239,7 @@ body {
     background-color: white;
 }
 
-/* ==========================================================================
-   DETAIL OUTFIT PANEL (KANAN)
-   ========================================================================== */
+/* detail outfit panel */
 .outfit-details {
     flex: 1;
     background: white;
@@ -304,7 +286,7 @@ body {
     box-shadow: 0 4px 10px rgba(0,0,0,0.02);
 }
 
-/* BUTTON CONTROLS */
+/* button */
 .btn-black {
     background: #2b2a28; 
     color: white; 
@@ -342,9 +324,7 @@ body {
     opacity: 0.8;
 }
 
-/* ==========================================================================
-   GRID RENCANA BAWAH
-   ========================================================================== */
+/* grid koleksi tersimpan */
 .saved-plans-section h3 {
     color: #2c2c2c;
     font-size: 1.6rem;
@@ -368,9 +348,6 @@ body {
     border-color: #c9a38d;
 }
 
-/* ==========================================================================
-   MODAL BOX
-   ========================================================================== */
 .modal {
     display: none; 
     position: fixed; 
@@ -456,13 +433,11 @@ body {
     color: #333;
 }
 
-/* ==========================================================================
-   RESPONSIVE LAYOUTS
-   ========================================================================== */
+/* responsif mobile */
 @media screen and (max-width: 992px) {
     #navbar {
         flex-direction: column;
-        padding: 0.8rem 5%;
+        padding: 0.8rem 5% !important;
         gap: 10px;
     }
 
@@ -471,7 +446,6 @@ body {
         overflow-x: auto;
         justify-content: flex-start;
         padding: 5px 0 10px;
-        -webkit-overflow-scrolling: touch;
     }
 
     .nav-container::-webkit-scrollbar {
@@ -479,7 +453,7 @@ body {
     }
 
     .nav-links {
-        gap: 18px;
+        gap: 15px;
         padding: 0 10px;
     }
 
@@ -488,7 +462,7 @@ body {
     }
 
     .planner-container {
-        padding-top: 150px;
+        padding-top: 160px !important;
     }
 
     .calendar-wrapper {
@@ -514,7 +488,7 @@ body {
 
 @media screen and (max-width: 600px) {
     .planner-container {
-        padding-top: 140px;
+        padding-top: 150px !important;
         padding-left: 4%;
         padding-right: 4%;
     }
@@ -534,4 +508,12 @@ body {
     .weekday { font-size: 0.75rem; }
     .outfit-preview-box { min-height: 160px; }
     .koleksi-grid-modal { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* footer */
+footer { 
+    text-align: center; 
+    padding: 40px; 
+    color: #aaa; 
+    font-size: 12px; 
 }
