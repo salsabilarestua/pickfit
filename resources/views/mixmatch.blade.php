@@ -89,7 +89,7 @@
 
         <div id="ai-planner-box" class="ai-detector-panel-wide" style="display: none; margin-top: 25px;">
             <div class="panel-header-ai">
-                <h3><i class="fa-solid fa-microchip"></i> Groq AI Rekomendasi Warna & Kecocokan</h3>
+                <h3><i class="fa-solid fa-microchip"></i> AI Rekomendasi Warna & Kecocokan</h3>
             </div>
             
             <div class="detector-body-wide">

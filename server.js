@@ -85,6 +85,7 @@ app.delete('/api/planner/:id', (req, res) => {
     });
 });
 
+
 app.listen(3000, () => {
     console.log('Server Backend PickFit berjalan di http://localhost:3000');
 });
@@ -97,12 +98,10 @@ app.post('/api/auth/register', (req, res) => {
         return res.status(400).json({ message: "Semua kolom wajib diisi!" });
     }
 
-    // Cek apakah email sudah terdaftar
     db.query('SELECT email FROM users WHERE email = ?', [email], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         if (results.length > 0) return res.status(400).json({ message: "Email sudah terdaftar!" });
 
-        // Simpan data user ke database
         const queryInsert = 'INSERT INTO users (name, email, password) VALUES (?, ?, ?)';
         db.query(queryInsert, [name, email, password], (err, result) => {
             if (err) return res.status(500).json({ error: err.message });
@@ -125,7 +124,6 @@ app.post('/api/auth/login', (req, res) => {
             return res.status(401).json({ message: "Email atau password salah!" });
         }
 
-        // Jika data cocok, kirimkan informasi user kembali ke frontend
         const user = results[0];
         res.status(200).json({
             message: "Login sukses!",
@@ -135,5 +133,14 @@ app.post('/api/auth/login', (req, res) => {
                 email: user.email
             }
         });
+    });
+});
+
+app.delete('/api/koleksi/:id', (req, res) => {
+    const { id } = req.params;
+    const query = "DELETE FROM planner WHERE id = ?";
+    db.query(query, [id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: "Sukses dihapus" });
     });
 });

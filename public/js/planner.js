@@ -98,12 +98,15 @@ function inisialisasiFiturKoleksi() {
             }
 
             daftarKoleksi.innerHTML = "";
+
             listJepretan.forEach(item => {
                 const itemCard = document.createElement("div");
                 itemCard.style = "background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);";
                 
                 itemCard.innerHTML = `
-                    <div style="width: 100%; height: 130px; background: #f8fafc; border-radius: 8px; overflow: hidden; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 100%; height: 130px; background: #f8fafc; border-radius: 8px; overflow: hidden; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <button onclick="event.stopPropagation(); hapusKoleksiOotd(${item.id})" style="position: absolute; top: 5px; right: 5px; background: #fee2e2; color: #dc2626; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 999; font-size: 14px; line-height: 0;">&times;</button>
+                        
                         <img src="${item.preview_snapshot}" style="width: 100%; height: 100%; object-fit: contain;">
                     </div>
                     <p style="font-size: 13px; font-weight: bold; margin: 4px 0; color: #1e293b;">👕 ${item.nama_atasan}</p>
@@ -201,13 +204,26 @@ async function muatRiwayatRencana() {
     }
 }
 
-//  HAPUS JADWAL PLANNER
+//  HAPUS JADWAL 
 window.hapusJadwalOotd = async function(id) {
     if (confirm("Hapus jadwal OOTD ini?")) {
         try {
             const response = await fetch(`http://localhost:3000/api/planner/${id}`, { method: "DELETE" });
             if (response.ok) { muatRiwayatRencana(); }
         } catch (error) { console.error(error); }
+    }
+}
+
+window.hapusKoleksiOotd = async function(id) {
+    if (confirm("Yakin ingin menghapus koleksi OOTD ini secara permanen?")) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/koleksi/${id}`, { method: "DELETE" });
+            if (response.ok) {
+                document.getElementById("addOutfitBtn").click();
+            }
+        } catch (error) { 
+            console.error("Gagal menghapus koleksi:", error); 
+        }
     }
 }
 

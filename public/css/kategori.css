@@ -11,7 +11,7 @@ body {
 h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif; }
 .signature, .signature-light { font-family: 'Great Vibes', cursive; }
 
-/* navbar */
+/* NAVBAR  */
 #navbar {
     display: flex;
     justify-content: space-between;
@@ -68,7 +68,7 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
 }
 
 .kategori-container {
-    padding: 120px 8% 50px;
+    padding: 45px 8% 50px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -101,7 +101,6 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
     cursor: pointer;
     transition: 0.3s;
 }
-
 
 .btn-filter {
     padding: 10px 25px;
@@ -156,36 +155,35 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
     letter-spacing: 1px;
 }
 
+/*RESPONSIF MOBILE & TABLET */
 @media screen and (max-width: 992px) {
     #navbar {
-        flex-direction: column;
-        padding: 0.8rem 5%;
-        gap: 10px;
+        flex-direction: column !important;
+        padding: 0.8rem 5% !important;
+        gap: 10px !important;
+        height: auto !important;
     }
 
     .nav-container {
-        width: 100%;
-        overflow-x: auto;
-        justify-content: flex-start;
-        padding: 5px 0 10px;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .nav-container::-webkit-scrollbar {
-        display: none;
+        display: flex !important;
+        width: 100% !important;
+        justify-content: center !important; 
+        padding: 5px 0 !important;
     }
 
     .nav-links {
-        gap: 15px;
-        padding: 0 10px;
+        gap: 15px !important;
+        padding: 0 !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important; 
     }
 
     .nav-links a {
-        font-size: 0.75rem;
+        font-size: 0.75rem !important;
     }
 
     .kategori-container {
-        padding-top: 140px;
+        padding-top: 115px !important; 
     }
 
     .section-title {
@@ -195,9 +193,9 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
 
 @media screen and (max-width: 600px) {
     .kategori-container {
-        padding-top: 130px;
-        padding-left: 5%;
-        padding-right: 5%;
+        padding-top: 30px !important;
+        padding-left: 5% !important;
+        padding-right: 5% !important;
     }
 
     .section-title {
@@ -205,16 +203,24 @@ h1, h2, .logo, .cat-brand, .footer-logo { font-family: 'Playfair Display', serif
     }
 
     .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 15px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+        gap: 15px !important;
     }
 
     .ootd-card img {
-        height: 220px;
+        height: 220px !important;
     }
 
     .btn-filter {
-        padding: 8px 15px;
-        font-size: 0.8rem;
+        padding: 8px 15px !important;
+        font-size: 0.8rem !important;
     }
 }
+
+/* footer */
+footer { 
+    text-align: center; 
+    padding: 40px; 
+    color: #aaa; 
+    font-size: 12px; 
+}}

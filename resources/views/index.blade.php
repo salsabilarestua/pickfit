@@ -43,9 +43,8 @@
 
     <header class="hero" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ asset('images/home.jpg') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">       
         <div class="hero-content">
-            <span class="signature-hero">Style by You</span> 
+            <span class="signature-hero">Pick Your Outfit Easily</span> 
             <h1>Tentukan Gaya Terbaikmu</h1>
-            <p>PICK YOUR OUTFIT EASILY</p>
             <button class="btn-nude" onclick="location.href='/lemari'">MULAI SEKARANG</button>
         </div>
     </header>

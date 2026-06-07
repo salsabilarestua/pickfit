@@ -3,7 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Navigasi & scroll
     const nav = document.getElementById('navbar');
     const menuBtn = document.getElementById('mobile-menu');
-    const navContainer = document.getElementById('nav-container');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navContainer = document.querySelector('.nav-container');
+
+
+    if (menuToggle && navContainer) {
+    menuToggle.addEventListener('click', () => {
+        navContainer.classList.toggle('active-nav');
+    });
+    }
 
     window.addEventListener('scroll', () => {
         if (nav && window.scrollY > 50) {

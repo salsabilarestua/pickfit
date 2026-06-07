@@ -12,7 +12,7 @@ body {
     color: #333;
 }
 
-/* navbar */
+/* NAVBAR */
 #navbar {
     display: flex;
     justify-content: space-between;
@@ -68,9 +68,8 @@ body {
     display: none !important;
 }
 
-/* jarak kontainer dinaikkan ke atas agar sejajar dengan planner/warna */
 .container {
-    padding-top: 100px; 
+    padding-top: 45px; 
     padding-bottom: 50px;
     padding-left: 8%;
     padding-right: 8%;
@@ -164,7 +163,7 @@ body {
     transform: translateY(0);
 }
 
-/* responsif mobile */
+/*  RESPONSIF MOBILE & TABLET  */
 @media screen and (max-width: 992px) {
     #navbar {
         flex-direction: column !important;
@@ -176,18 +175,15 @@ body {
     .nav-container {
         display: flex !important;
         width: 100% !important;
-        overflow-x: auto !important;
-        justify-content: flex-start !important;
-        padding: 5px 0 10px !important;
-    }
-
-    .nav-container::-webkit-scrollbar {
-        display: none !important;
+        justify-content: center !important; 
+        padding: 5px 0 !important;
     }
 
     .nav-links {
         gap: 15px !important;
-        padding: 0 10px !important;
+        padding: 0 !important;
+        justify-content: center !important; 
+        flex-wrap: wrap !important; 
     }
 
     .nav-links a {
@@ -195,11 +191,12 @@ body {
     }
 
     .container {
-        padding-top: 140px !important;
+        padding-top: 115px !important; 
     }
 
     .section-title {
         font-size: 1.8rem;
+        margin-bottom: 25px; 
     }
 }
 

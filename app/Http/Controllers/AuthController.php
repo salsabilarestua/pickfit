@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // Proses Daftar (Simpan ke Database)
+    // Proses Daftar
     public function daftar(Request $request)
     {
         $request->validate([
@@ -18,17 +18,16 @@ class AuthController extends Controller
             'password' => 'required|string|min:6',
         ]);
 
-        // Simpan ke database MySQL lewat Model User bawaan Laravel
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Password di-enkripsi demi keamanan
+            'password' => Hash::make($request->password), 
         ]);
 
         return redirect('/masuk')->with('success', 'Pendaftaran berhasil! Silakan masuk.');
     }
 
-    // Proses Masuk (Validasi ke Database)
+    // Proses Masuk 
     public function masuk(Request $request)
     {
         $credentials = $request->validate([
@@ -36,19 +35,18 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Cek email & password ke database. Jika cocok, Laravel otomatis membuat Session
+        // Cek email & password ke database
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect('/')->with('success', 'Selamat datang kembali!');
         }
 
-        // Jika salah, balikkan ke halaman login dengan pesan error
         return back()->withErrors([
             'email' => 'Email atau password yang kamu masukkan salah.',
         ]);
     }
 
-    // Proses Keluar (Hapus Session)
+    // Proses Keluar 
     public function keluar(Request $request)
     {
         Auth::logout();
