@@ -27,7 +27,7 @@ class ForgotPasswordController extends Controller
 
         $token = Str::random(64);
 
-        DB::table('password_resets')->updateOrInsert(
+        DB::table('password_reset_tokens')->updateOrInsert(
             ['email' => $request->email],
             [
                 'token' => Hash::make($token),
@@ -46,24 +46,29 @@ class ForgotPasswordController extends Controller
     }
 
     public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6|confirmed', 
-        ]);
+{
+    $request->validate([
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => 'required|min:6|confirmed', 
+    ]);
 
-        $record = DB::table('password_resets')->where('email', $request->email)->first();
+    // 1. Pastikan nama tabelnya password_reset_tokens
+    $record = DB::table('password_reset_tokens')->where('email', $request->email)->first();
 
-        if (!$record || !Hash::check($request->token, $record->token)) {
-            return back()->withErrors(['email' => 'Token reset password tidak valid atau sudah kedaluwarsa.']);
-        }
-
-        DB::table('users')->where('email', $request->email)->update([
-            'password' => Hash::make($request->password)
-        ]);
-        DB::table('password_resets')->where(['email' => $request->email])->delete();
-
-        return redirect('/login')->with('status', 'Password berhasil diperbarui! Silakan masuk.');
+    if (!$record || !Hash::check($request->token, $record->token)) {
+        return back()->withErrors(['email' => 'Token reset password tidak valid atau sudah kedaluwarsa.']);
     }
+
+    // 2. Update password user
+    DB::table('users')->where('email', $request->email)->update([
+        'password' => Hash::make($request->password)
+    ]);
+
+    // 3. Ubah ini menjadi password_reset_tokens agar tidak error saat hapus token lama
+    DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+    // 4. PERBAIKAN UTAMA: Arahkan redirect ke rute 'login' (bukan URL /login)
+    return redirect()->route('login')->with('status', 'Password berhasil diperbarui! Silakan masuk.');
+}
 }
