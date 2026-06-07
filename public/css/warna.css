@@ -23,10 +23,11 @@ body {
     text-align: center;
 }
 
+/* === BAGIAN YANG DIUBAH === */
 .section-title {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    margin-bottom: 10px;
+    margin-bottom: 55px; /* Ditambah dari 10px ke 55px agar tulisan bergeser ke atas dan memberi jarak ke kotak */
     color: var(--grey-dark);
 }
 
@@ -98,56 +99,51 @@ body {
     pointer-events: none;
 }
 
-/* navbar  */
+/* navbar */
 #navbar {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    padding: 0 8% !important;
-    background: #ffffff !important;
-    position: fixed !important;
-    top: 0 !important; 
-    left: 0 !important;
-    width: 100% !important;
-    height: 70px !important;
-    z-index: 1000 !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
-}
-
-.nav-container {
-    display: contents !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 8%;
+    background: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;           
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .logo {
     font-family: 'Playfair Display', serif !important;
     font-size: 1.6rem !important;
-    font-weight: 700 !important;
+    font-weight: 700;
     color: #333333 !important;
     text-decoration: none !important;
-    white-space: nowrap !important;
 }
 
-.logo span { 
-    color: #c9a38d !important; 
+.logo span {
+    color: #c9a38d !important;
+}
+
+.nav-container {
+    display: flex;
+    align-items: center;
 }
 
 .nav-links {
     display: flex !important;
     list-style: none !important;
-    gap: 30px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    align-items: center !important;
+    gap: 20px;
 }
 
 .nav-links a {
     text-decoration: none !important;
-    color: #333333 !important;
-    font-size: 0.85rem !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    white-space: nowrap !important;
-    transition: 0.3s !important;
+    color: #333333;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .nav-links a.active, 

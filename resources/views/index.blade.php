@@ -20,19 +20,24 @@
                 <li><a href="/planner">PLANNER</a></li>
             </ul>
 
-            <div id="guest-menu">
-                @if(request()->get('login') == 'true')
-                    <a href="/profil" class="btn-black">PROFIL</a>
-                @else
+            {{-- JIKA PENGGUNA BELUM LOGIN --}}
+            @guest
+                <div id="guest-menu">
                     <a href="/masuk" class="btn-link">Masuk</a>
                     <a href="/daftar" class="btn-black">DAFTAR</a>
-                @endif
-            </div>
+                </div>
+            @endguest
 
-            <div id="user-menu" style="display: none;">
-                <a href="/profil" class="btn-black">PROFIL</a>
-                <button id="logout-btn" class="btn-link" style="border:none; background:none; cursor:pointer;">Keluar</button>
-            </div>
+            {{-- JIKA PENGGUNA SUDAH LOGIN KE DATABASE --}}
+            @auth
+                <div id="user-menu">
+                    <a href="/profil" class="btn-black">PROFIL</a>
+                    <form action="{{ route('logout.post') }}" method="POST" style="display: inline;">
+                        @csrf
+                        <button type="submit" class="btn-link" style="border:none; background:none; cursor:pointer;">Keluar</button>
+                    </form>
+                </div>
+            @endauth
         </div>
     </nav>
 

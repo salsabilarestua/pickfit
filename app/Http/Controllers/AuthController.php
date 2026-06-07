@@ -4,42 +4,56 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    // Proses Daftar (Simpan ke Database)
+    public function daftar(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
 
+        // Simpan ke database MySQL lewat Model User bawaan Laravel
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password), // Password di-enkripsi demi keamanan
         ]);
 
-        return redirect('/masuk')->with('success', 'Registrasi berhasil!');
+        return redirect('/masuk')->with('success', 'Pendaftaran berhasil! Silakan masuk.');
     }
 
-    public function login(Request $request)
+    // Proses Masuk (Validasi ke Database)
+    public function masuk(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
+        // Cek email & password ke database. Jika cocok, Laravel otomatis membuat Session
         if (Auth::attempt($credentials)) {
-            return redirect('/');
+            $request->session()->regenerate();
+            return redirect('/')->with('success', 'Selamat datang kembali!');
         }
 
-        return back()->with('error', 'Email atau password salah!');
+        // Jika salah, balikkan ke halaman login dengan pesan error
+        return back()->withErrors([
+            'email' => 'Email atau password yang kamu masukkan salah.',
+        ]);
     }
 
-    public function logout()
+    // Proses Keluar (Hapus Session)
+    public function keluar(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect('/');
     }
-}   
+}

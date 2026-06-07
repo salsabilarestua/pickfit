@@ -1,38 +1,52 @@
-const gridLemari = document.getElementById('grid-lemari');
+const gridLemari = document.getElementById('grid-lemari') || document.getElementById('daftarBaju') || document.getElementById('lemari-grid');
 const btnTambah = document.getElementById('btn-tambah');
-const apiKeyRemoveBg = "XN53EsNF4LQT3TzJdM6qNCFx"; // API Key Remove.bg
+const apiKeyRemoveBg = "XN53EsNF4LQT3TzJdM6qNCFx"; 
+const API_URL = "http://localhost:3000/api/wardrobe"; 
 
-// Menampilkan katalog baju di lemari
-function tampilkanLemari() {
+// TAMPILKAN KATALOG LEMARI
+async function tampilkanLemari() {
     if (!gridLemari) return;
     gridLemari.innerHTML = "";
     
-    const koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error(`Status: ${response.status}`);
+        
+        const koleksi = await response.json();
 
-    if (koleksi.length === 0) {
-        gridLemari.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #888;">Lemarimu kosong nih!</p>`;
-        return;
+        if (koleksi.length === 0) {
+            gridLemari.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 20px;">Lemarimu kosong nih! Yuk tambah koleksi baru.</p>`;
+            return;
+        }
+        
+        koleksi.forEach((item) => {
+            const card = document.createElement('div');
+            card.className = "wardrobe-item";
+            card.style = "background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);";
+            
+            card.innerHTML = `
+                <div style="width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8fafc; border-radius: 8px;">
+                    <img src="${item.image_url}" alt="${item.name}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                </div>
+                <p style="font-weight: 600; margin-top: 12px; margin-bottom: 8px; color: #1e293b;">${item.name}</p>
+                <div class="item-controls" style="display: flex; justify-content: center;">
+                    <button class="btn-delete" onclick="window.hapusBaju(${item.id})" style="width: 100%; background: #fee2e2; color: #dc2626; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s;" onmouseover="this.style.background='#fca5a5'" onmouseout="this.style.background='#fee2e2'">Hapus Item</button>
+                </div>
+            `;
+            gridLemari.appendChild(card);
+        });
+    } catch (err) {
+        console.error("❌ Gagal memuat data dari MySQL:", err);
+        gridLemari.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: red; font-weight: 600; padding: 20px;">⚠️ Gagal terhubung ke database server!</p>`;
     }
-    
-    koleksi.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = "wardrobe-item";
-        card.innerHTML = `
-            <img src="${item.foto}" alt="${item.nama}">
-            <p style="font-weight: 600; margin-top: 12px; margin-bottom: 5px;">${item.nama}</p>
-            <div class="item-controls" style="justify-content: center;">
-                <button class="btn-delete" onclick="hapusBaju(${index})" style="width: 100%;">Hapus Item</button>
-            </div>
-        `;
-        gridLemari.appendChild(card);
-    });
 }
 
-// Tambah baju
+//  TAMBAH BAJU BARU (REMOVE BG) 
 if (btnTambah) {
     btnTambah.addEventListener('click', async () => {
         const namaInput = document.getElementById('nama-baju');
         const fileInput = document.getElementById('foto-baju');
+        const kategoriSelect = document.getElementById('kategori-baju') || { value: 'Atasan' }; 
         
         if (!namaInput.value.trim() || fileInput.files.length === 0) {
             alert("Isi nama dan foto dulu ya!");
@@ -60,16 +74,29 @@ if (btnTambah) {
             const blob = await response.blob();
             const reader = new FileReader();
             
-            reader.onloadend = () => {
-                const koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
-                koleksi.push({ nama: namaInput.value.trim(), foto: reader.result });
-                localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
-                
-                namaInput.value = "";
-                fileInput.value = "";
-                
-                tampilkanLemari();
-                alert("Berhasil ditambah!");
+            reader.onloadend = async () => {
+                try {
+                    const responseDb = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            name: namaInput.value.trim(),
+                            category: kategoriSelect.value || "Atasan",
+                            image_url: reader.result
+                        })
+                    });
+
+                    if (responseDb.ok) {
+                        namaInput.value = "";
+                        fileInput.value = "";
+                        tampilkanLemari(); 
+                        alert("Berhasil ditambah ke database MySQL!");
+                    } else {
+                        alert("Gagal menyimpan ke database server! Periksa struktur rute POST backend kamu.");
+                    }
+                } catch (dbErr) {
+                    alert("Koneksi server database terputus!");
+                }
             };
             reader.readAsDataURL(blob);
 
@@ -82,23 +109,26 @@ if (btnTambah) {
     });
 }
 
-// Menghapus baju
-window.hapusBaju = function(index) {
+// HAPUS ITEM BAJU FROM DB 
+window.hapusBaju = async function(id) {
     if (confirm("Hapus item ini dari lemari?")) {
-        const koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
-        koleksi.splice(index, 1);
-        localStorage.setItem('lemariPickFit', JSON.stringify(koleksi));
-        tampilkanLemari();
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                tampilkanLemari();
+                alert("Item berhasil dihapus dari MySQL!");
+            } else {
+                alert("Gagal menghapus dari database server.");
+            }
+        } catch (err) {
+            alert("Koneksi server database gagal!");
+        }
     }
 };
 
-// Inisialisasi awal
 document.addEventListener("DOMContentLoaded", () => {
-    tampilkanLemari();
-    
-    const savedUsername = localStorage.getItem('activeUser');
-    const displayUsername = document.getElementById('display-username');
-    if (displayUsername && savedUsername) {
-        displayUsername.textContent = savedUsername;
-    }
+    tampilkanLemari(); 
 });

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class MixMatchController extends Controller
 {
-    public function panggilGemini(Request $request) 
+    public function panggilGroq(Request $request) 
     {
         $atasan = $request->input('atasan');
         $bawahan = $request->input('bawahan');
@@ -32,7 +32,7 @@ class MixMatchController extends Controller
            <li><b>👟 Pilihan Alas Kaki (Sepatu):</b> (Rekomendasikan secara spesifik jenis sepatu yang paling cocok beserta opsi warnanya, misalnya: Sneakers chunky putih, Dr. Martens boots hitam, loafers kulit cokelat, dll., jelaskan alasannya kenapa cocok dengan celana tersebut)</li>
            <li><b>🎒 Aksesoris Pendukung:</b> (Sebutkan jam tangan tipe apa, kacamata model apa, jenis tas seperti slingbag/backpack/tote bag, kalung/gelang, atau topi yang sesuai tema look ini untuk mendongkrak penampilan. DILARANG KERAS menyebutkan kerudung, hijab, jilbab, atau penutup kepala religi apapun!)</li>
            <li><b>🧥 Outer Tambahan (Opsional):</b> (Berikan saran jika look ini akan semakin keren kalau ditambah outer seperti jaket denim, kemeja flanel luar, blazer, atau cardigan beserta warnanya)</li>
-        </ul>
+         </ul>
         
         Gunakan gaya bahasa santai, ekspresif, informatif, modis, dan mengesankan untuk anak muda. Jangan sebutkan kata hijab/kerudung/muslimah sama sekali.";
 

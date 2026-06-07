@@ -1,13 +1,23 @@
 {
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build"
-    },
-    "devDependencies": {
-        "axios": "^1.6.4",
-        "laravel-vite-plugin": "^1.0.0",
-        "vite": "^5.0.0"
-    }
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "node server.js",
+    "dev-all": "concurrently \"php artisan serve\" \"node server.js\""
+  },
+  "devDependencies": {
+    "axios": "^1.6.4",
+    "concurrently": "^10.0.3",
+    "laravel-vite-plugin": "^1.0.0",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mysql2": "^3.22.5"
+  },
+  "name": "pickfit"
 }

@@ -49,7 +49,6 @@
                     <div class="action-buttons">
                         <button class="btn-black" id="addOutfitBtn">Pilih dari Koleksi</button>
                         <button id="savePlannerBtn" style="background: #28a745; color: white; width: 100%; padding: 12px; border-radius: 50px; border: none; font-weight: 600; margin-top: 10px; cursor: pointer;">Simpan ke Kalender</button>
-                        <button class="btn-delete-plan" id="clearOutfitBtn">Hapus Jadwal</button>
                     </div>
                 </div>
             </div>

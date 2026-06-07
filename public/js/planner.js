@@ -1,178 +1,219 @@
-let date = new Date();
-let currentMonth = date.getMonth();
-let currentYear = date.getFullYear();
-let plannerData = JSON.parse(localStorage.getItem('plannerData')) || {};
-const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-let selectedDateKey = null;
-let tempSelection = null;
+let currentDate = new Date();
+let selectedDateString = null; 
+let jepretanTerpilih = null; 
 
-// Render kalender
-function renderCalendar() {
-    const daysContainer = document.getElementById('calendarDays');
-    const monthDisplay = document.getElementById('monthDisplay');
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    
-    monthDisplay.innerText = `${monthNames[currentMonth]} ${currentYear}`;
-    daysContainer.innerHTML = "";
+const months = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+];
 
-    for (let i = 0; i < firstDay; i++) {
-        daysContainer.innerHTML += `<div></div>`;
-    }
+// INITIALIZE KALENDER
+function inisialisasiKalender() {
+    const monthDisplay = document.getElementById("monthDisplay");
+    const calendarDays = document.getElementById("calendarDays");
+    const prevMonthBtn = document.getElementById("prevMonth");
+    const nextMonthBtn = document.getElementById("nextMonth");
 
-    for (let d = 1; d <= daysInMonth; d++) {
-        const dateKey = `${currentYear}-${currentMonth}-${d}`;
-        const hasOutfit = plannerData[dateKey] ? 'has-outfit' : '';
-        const dayEl = document.createElement('div');
-        dayEl.className = `day ${hasOutfit}`;
-        dayEl.innerText = d;
-        
-        // Status aktif
-        if (selectedDateKey === dateKey) {
-            dayEl.classList.add('active');
+    if (!calendarDays || !monthDisplay) return;
+
+    function renderCalendar() {
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        monthDisplay.textContent = `${months[month]} ${year}`;
+        calendarDays.innerHTML = "";
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const lastDay = new Date(year, month + 1, 0).getDate();
+        const prevLastDay = new Date(year, month, 0).getDate();
+
+        for (let x = firstDayIndex; x > 0; x--) {
+            const dayDiv = document.createElement("div");
+            dayDiv.classList.add("day", "prev-date");
+            dayDiv.textContent = prevLastDay - x + 1;
+            calendarDays.appendChild(dayDiv);
         }
-        
-        dayEl.onclick = function() {
-            document.querySelectorAll('.day').forEach(el => el.classList.remove('active'));
-            this.classList.add('active');
-            selectDate(d, dateKey);
-        };
-        daysContainer.appendChild(dayEl);
+
+        for (let i = 1; i <= lastDay; i++) {
+            const dayDiv = document.createElement("div");
+            dayDiv.classList.add("day");
+            dayDiv.textContent = i;
+
+            const today = new Date();
+            if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                dayDiv.classList.add("today");
+            }
+
+            dayDiv.addEventListener("click", () => {
+                document.querySelectorAll("#calendarDays .day").forEach(d => d.classList.remove("selected-day"));
+                dayDiv.classList.add("selected-day");
+                
+                const objekTanggal = new Date(year, month, i);
+                selectedDateString = objekTanggal.toLocaleDateString('id-ID', { 
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                });
+
+                const selectedDateText = document.getElementById("selectedDateText");
+                if (selectedDateText) selectedDateText.textContent = selectedDateString;
+            });
+
+            calendarDays.appendChild(dayDiv);
+        }
     }
+
+    prevMonthBtn?.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
+    nextMonthBtn?.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+    renderCalendar();
 }
 
-// Pilih tanggal
-function selectDate(day, key) {
-    selectedDateKey = key;
-    tempSelection = null; 
-    document.getElementById('selectedDateText').innerText = `OOTD Tanggal ${day}`;
-    const preview = document.getElementById('outfitPreview');
-    
-    if (plannerData[key] && Array.isArray(plannerData[key])) {
-        const imagesHtml = plannerData[key].map(src => 
-            `<img src="${src}" style="width: 85px; height: 85px; object-fit: contain; margin: 5px; background: white; border-radius: 12px; border: 1px solid #eeece8; padding: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);">`
-        ).join("");
-        preview.innerHTML = `<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 10px;">${imagesHtml}</div>`;
-    } else {
-        preview.innerHTML = `<p style="color: #ccc; font-size: 0.85rem;">Belum ada jadwal outfit</p>`;
-    }
-}
+// AMBIL JEPRETAN (BUKA MODAL)
+function inisialisasiFiturKoleksi() {
+    const addOutfitBtn = document.getElementById("addOutfitBtn");
+    const modalKoleksi = document.getElementById("modalKoleksi");
+    const daftarKoleksi = document.getElementById("daftarKoleksi");
+    const outfitPreview = document.getElementById("outfitPreview");
 
-// Buka modal koleksi
-document.getElementById('addOutfitBtn').onclick = () => {
-    if (!selectedDateKey) return alert("Pilih tanggal di kalender dulu!");
-    const modal = document.getElementById('modalKoleksi');
-    const daftarKoleksi = document.getElementById('daftarKoleksi');
-    const koleksi = JSON.parse(localStorage.getItem('koleksiOutfit')) || [];
+    addOutfitBtn?.addEventListener("click", async () => {
+        if (!selectedDateString) {
+            alert("⚠️ Pilih tanggal di kalender terlebih dahulu!");
+            return;
+        }
 
-    modal.style.display = 'flex';
-    daftarKoleksi.innerHTML = "";
+        modalKoleksi.style.display = "flex";
+        daftarKoleksi.innerHTML = "<p style='text-align: center; grid-column: 1/-1;'>Mengambil riwayat jepretan Mix & Match...</p>";
 
-    if (koleksi.length === 0) {
-        daftarKoleksi.innerHTML = "<p style='grid-column: span 3; padding: 20px; color: #999;'>Koleksi kosong. Buat dulu di Mix & Match!</p>";
-        return;
-    }
-
-    koleksi.forEach(outfit => {
-        const card = document.createElement('div');
-        card.className = "koleksi-item-modal";
-        const imgsHtml = outfit.items.map(url => `<img src="${url}" style="width:45px; height:45px; object-fit:contain;">`).join("");
-        card.innerHTML = `<div class="mini-preview" style="display:flex; gap:5px; justify-content:center; flex-wrap:wrap;">${imgsHtml}</div>`;
-        
-        card.onclick = () => {
-            tempSelection = outfit.items;
-            const previewHtml = tempSelection.map(src => `<img src="${src}" style="width:85px; height:85px; object-fit:contain; margin:5px; background:white; border-radius:12px; border:1px solid #eeece8; padding:6px;">`).join("");
-            document.getElementById('outfitPreview').innerHTML = `<div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center;">${previewHtml}</div>`;
-            tutupModal();
-        };
-        daftarKoleksi.appendChild(card);
-    });
-};
-
-// Simpan ke kalender
-document.getElementById('savePlannerBtn').onclick = () => {
-    if (!selectedDateKey) return alert("Pilih tanggal di kalender dulu!");
-    if (!tempSelection) return alert("Pilih outfit dari koleksi dulu!");
-
-    plannerData[selectedDateKey] = tempSelection;
-    localStorage.setItem('plannerData', JSON.stringify(plannerData));
-
-    alert("Berhasil disimpan ke kalender!");
-    renderCalendar();
-    tampilkanSemuaRencana();
-    tempSelection = null;
-};
-
-// Bulan sebelumnya
-document.getElementById('prevMonth').onclick = () => {
-    currentMonth--;
-    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-    renderCalendar();
-};
-
-// Bulan berikutnya
-document.getElementById('nextMonth').onclick = () => {
-    currentMonth++;
-    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-    renderCalendar();
-};
-
-// Hapus jadwal outfit
-document.getElementById('clearOutfitBtn').onclick = () => {
-    if (selectedDateKey && plannerData[selectedDateKey]) {
-        if(confirm("Hapus jadwal untuk tanggal ini?")) {
-            const tempDay = selectedDateKey.split('-')[2];
-            delete plannerData[selectedDateKey];
-            localStorage.setItem('plannerData', JSON.stringify(plannerData));
+        try {
+            const response = await fetch('http://localhost:3000/api/mixmatch');
+            if (!response.ok) throw new Error("404 Not Found");
             
-            renderCalendar();
-            tampilkanSemuaRencana();
-            selectDate(tempDay, selectedDateKey);
+            const listJepretan = await response.json();
+
+            if (!listJepretan || listJepretan.length === 0) {
+                daftarKoleksi.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; color: #666; padding: 20px;">
+                        <p style="margin: 0; font-size: 14px;">📸 Belum ada riwayat foto kombinasi.</p>
+                        <small style="color: #999;">Buka menu Mix & Match dan jepret pakaian AR-mu terlebih dahulu!</small>
+                    </div>`;
+                return;
+            }
+
+            daftarKoleksi.innerHTML = "";
+            listJepretan.forEach(item => {
+                const itemCard = document.createElement("div");
+                itemCard.style = "background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);";
+                
+                itemCard.innerHTML = `
+                    <div style="width: 100%; height: 130px; background: #f8fafc; border-radius: 8px; overflow: hidden; margin-bottom: 8px; display: flex; align-items: center; justify-content: center;">
+                        <img src="${item.preview_snapshot}" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <p style="font-size: 13px; font-weight: bold; margin: 4px 0; color: #1e293b;">👕 ${item.nama_atasan}</p>
+                    <p style="font-size: 11px; color: #64748b; margin: 0;">👖 ${item.nama_bawahan}</p>
+                `;
+
+                itemCard.addEventListener("click", () => {
+                    jepretanTerpilih = item;
+                    outfitPreview.innerHTML = `
+                        <div style="text-align: center; width: 100%;">
+                            <img src="${item.preview_snapshot}" style="max-width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 5px;">
+                            <h4 style="margin: 0; font-size: 13px; color: #0f172a;">Kombinasi Terpilih</h4>
+                            <p style="margin: 2px 0; font-size: 11px; color: #475569;">${item.nama_atasan} & ${item.nama_bawahan}</p>
+                        </div>
+                    `;
+                    tutupModal();
+                });
+
+                daftarKoleksi.appendChild(itemCard);
+            });
+
+        } catch (error) {
+            daftarKoleksi.innerHTML = "<p style='color: #dc2626; grid-column: 1/-1; text-align: center;'>❌ Server gagal merespon rute jepretan.</p>";
         }
-    } else {
-        alert("Pilih tanggal yang ada jadwalnya untuk dihapus.");
-    }
-};
-
-// Tampilkan daftar semua rencana
-function tampilkanSemuaRencana() {
-    const listRencana = document.getElementById('listRencana');
-    if (!listRencana) return;
-    listRencana.innerHTML = "";
-
-    Object.keys(plannerData).forEach(key => {
-        const item = plannerData[key];
-        const parts = key.split('-');
-        const dayLabel = parts[2] + " " + monthNames[parts[1]];
-        
-        const card = document.createElement('div');
-        card.style.background = "white";
-        card.style.padding = "20px";
-        card.style.borderRadius = "20px";
-        card.style.boxShadow = "0 8px 20px rgba(89,88,67,0.03)";
-        card.style.textAlign = "center";
-        card.style.border = "1px solid #f0edea";
-        
-        const imgsHtml = item.map(src => `<img src="${src}" style="width: 50px; height: 50px; object-fit: contain; margin: 3px; background: #faf9f6; padding: 4px; border-radius: 8px; border: 1px solid #f0edea;">`).join("");
-        
-        card.innerHTML = `
-            <p style="font-weight:600; font-size:14px; margin-bottom:12px; color: #333;">${dayLabel}</p>
-            <div style="display:flex; justify-content:center; flex-wrap: wrap; gap:4px;">${imgsHtml}</div>
-        `;
-        listRencana.appendChild(card);
     });
 }
 
-// Tutup modal
-function tutupModal() {
-    document.getElementById('modalKoleksi').style.display = 'none';
+// TUTUP MODAL KOLEKSI 
+window.tutupModal = function() {
+    const modalKoleksi = document.getElementById("modalKoleksi");
+    if (modalKoleksi) modalKoleksi.style.display = "none";
 }
 
-// Klik area luar modal
-window.onclick = (event) => {
-    if (event.target == document.getElementById('modalKoleksi')) tutupModal();
-};
+//  SIMPAN JADWAL (KIRIM KE DB)
+function inisialisasiTombolSimpan() {
+    const savePlannerBtn = document.getElementById("savePlannerBtn");
+    savePlannerBtn?.addEventListener("click", async () => {
+        if (!selectedDateString || !jepretanTerpilih) {
+            alert("⚠️ Lengkapi pilihan tanggal dan jepretan koleksi terlebih dahulu!");
+            return;
+        }
 
-// Inisialisasi awal
-renderCalendar();
-tampilkanSemuaRencana();
+        try {
+            const response = await fetch('http://localhost:3000/api/planner', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ idJepretan: jepretanTerpilih.id, tanggalRencana: selectedDateString })
+            });
+
+            if (response.ok) {
+                alert(`📅 Sukses mendaftarkan OOTD untuk hari ${selectedDateString}!`);
+                muatRiwayatRencana();
+                document.getElementById("outfitPreview").innerHTML = `<p style="color: #ccc; font-size: 0.85rem;">Klik tanggal untuk melihat jadwal</p>`;
+                jepretanTerpilih = null;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+}
+
+// TAMPILKAN RIWAYAT RENCANA 
+async function muatRiwayatRencana() {
+    const listHistoryOotd = document.getElementById("listRencana");
+    if (!listHistoryOotd) return;
+
+    try {
+        const response = await fetch('http://localhost:3000/api/planner');
+        if (!response.ok) return;
+        const daftarRencana = await response.json();
+
+        if (daftarRencana.length === 0) {
+            listHistoryOotd.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 20px;">📅 Rencana OOTD di bawah ini masih kosong.</p>`;
+            return;
+        }
+
+        listHistoryOotd.innerHTML = "";
+        daftarRencana.forEach(item => {
+            const card = document.createElement("div");
+            card.style = "background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 15px; position: relative; display: flex; flex-direction: column; text-align: left;";
+
+            card.innerHTML = `
+                <button onclick="hapusJadwalOotd(${item.id})" style="position: absolute; top: 10px; right: 10px; background: #fee2e2; color: #dc2626; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer;">&times;</button>
+                <div style="width: 100%; height: 160px; background: #f8fafc; border-radius: 10px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                    <img src="${item.preview_snapshot}" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
+                <span style="font-size: 11px; color: #a1824a; font-weight: bold; display: block; margin-bottom: 4px;">📅 ${item.tanggal_rencana}</span>
+                <h4 style="margin: 0; font-size: 14px; color: #0f172a;">${item.nama_atasan}</h4>
+                <p style="margin: 0; font-size: 12px; color: #64748b;">${item.nama_bawahan}</p>
+            `;
+            listHistoryOotd.appendChild(card);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+//  HAPUS JADWAL PLANNER
+window.hapusJadwalOotd = async function(id) {
+    if (confirm("Hapus jadwal OOTD ini?")) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/planner/${id}`, { method: "DELETE" });
+            if (response.ok) { muatRiwayatRencana(); }
+        } catch (error) { console.error(error); }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    inisialisasiKalender();
+    inisialisasiFiturKoleksi();
+    inisialisasiTombolSimpan();
+    muatRiwayatRencana();
+});

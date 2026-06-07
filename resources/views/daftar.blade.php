@@ -14,10 +14,12 @@
 
             <h2 class="serif" style="margin-top: 15px;">Daftar <span class="brand-color">PickFit</span></h2>
             
-            <form id="form-registrasi" action="/masuk" method="GET">
-                <input type="text" name="name" placeholder="Nama Lengkap" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="password" name="password" id="pass-daftar" placeholder="Password" required>
+            <form action="{{ route('register.post') }}" method="POST">
+                @csrf
+                
+                <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+                <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+                <input type="password" name="password" placeholder="Password" required>
                 
                 <button type="submit" class="btn-black">DAFTAR SEKARANG</button>
 

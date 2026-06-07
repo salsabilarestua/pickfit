@@ -25,3 +25,16 @@ Route::view('/resetpassword', 'resetpassword');
 
 // AI API
 Route::post('/api/groq-recommendation', [MixMatchController::class, 'panggilGroq']);
+
+use App\Http\Controllers\AuthController;
+
+// Halaman Tampilan
+Route::get('/', function () { return view('index'); })->name('home');
+Route::get('/masuk', function () { return view('masuk'); })->name('login');
+Route::get('/daftar', function () { return view('daftar'); });
+Route::get('/profil', function () { return view('profile'); })->middleware('auth'); // Hanya bisa dibuka jika sudah login
+
+// Eksekusi Form (Database)
+Route::post('/proses-daftar', [AuthController::class, 'daftar'])->name('register.post');
+Route::post('/proses-masuk', [AuthController::class, 'masuk'])->name('login.post');
+Route::post('/proses-keluar', [AuthController::class, 'keluar'])->name('logout.post');

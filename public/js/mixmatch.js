@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }).join("").toUpperCase();
     }
 
-    // Hit API Groq
+    // REKOMENDASI AI
     async function panggilGroqAI() {
         const textContainer = document.getElementById("ai-text-tips-dynamic");
         if (!textContainer) return;
@@ -34,13 +34,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const namaAtasan = shirtEl ? shirtEl.textContent.trim() : "";
         const namaBawahan = pantsEl ? pantsEl.textContent.trim() : "";
 
-        // Validasi input
         if (!namaAtasan || namaAtasan.includes("Belum memilih") || !namaBawahan || namaBawahan.includes("Belum memilih")) {
             textContainer.innerHTML = `<p style="color: #cca300; text-align: center;"><i class="fa-solid fa-info-circle"></i> Pasang dulu Atasan dan Bawahan di badan kamu untuk melihat rekomendasi OOTD otomatis! 😉</p>`;
             return;
         }
 
-        // Loading state
         textContainer.innerHTML = `
             <div class="ai-loading-pulsate" style="text-align: center; padding: 20px;">
                 <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 24px; color: #595843;"></i> 
@@ -73,88 +71,92 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Muat data lemari
-    function muatLemari() {
+    // MUAT DATA LEMARI 
+    async function muatLemari() {
         if (!containerLemari) return;
         containerLemari.innerHTML = "";
-        const koleksi = JSON.parse(localStorage.getItem('lemariPickFit')) || [];
+        
+        try {
+            const response = await fetch('http://localhost:3000/api/wardrobe');
+            const koleksi = await response.json();
 
-        if (koleksi.length === 0) {
-            containerLemari.innerHTML = `<p class="empty-txt">Lemari kosong. Isi di menu Lemari dulu ya!</p>`;
-            return;
-        }
+            if (koleksi.length === 0) {
+                containerLemari.innerHTML = `<p class="empty-txt">Lemari kosong. Isi di menu Lemari dulu ya!</p>`;
+                return;
+            }
 
-        koleksi.forEach((item) => {
-            const card = document.createElement("div");
-            card.className = "closet-item-card";
-            card.innerHTML = `
-                <div class="box-white-image"><img src="${item.foto}" alt="${item.nama}" crossorigin="anonymous"></div>
-                <p class="item-label">${item.nama}</p>
-            `;
+            koleksi.forEach((item) => {
+                const card = document.createElement("div");
+                card.className = "closet-item-card";
+                card.innerHTML = `
+                    <div class="box-white-image"><img src="${item.image_url}" alt="${item.name}" crossorigin="anonymous"></div>
+                    <p class="item-label">${item.name}</p>
+                `;
 
-            // Event klik item lemari
-            card.addEventListener("click", () => {
-                document.querySelectorAll(".closet-item-card").forEach(el => el.classList.remove("selected-card"));
-                card.classList.add("selected-card");
+                card.addEventListener("click", () => {
+                    document.querySelectorAll(".closet-item-card").forEach(el => el.classList.remove("selected-card"));
+                    card.classList.add("selected-card");
 
-                const imgObj = new Image();
-                imgObj.crossOrigin = "anonymous";
-                imgObj.src = item.foto;
+                    const imgObj = new Image();
+                    imgObj.crossOrigin = "anonymous";
+                    imgObj.src = item.image_url;
 
-                const namaLower = item.nama.toLowerCase();
-                const isBawahan = namaLower.includes("celana") || namaLower.includes("rok") || namaLower.includes("bawahan") || namaLower.includes("kulot");
+                    const namaLower = item.name.toLowerCase();
+                    const isBawahan = namaLower.includes("celana") || namaLower.includes("rok") || namaLower.includes("bawahan") || namaLower.includes("kulot");
 
-                if (isBawahan) {
-                    activePantsImg = imgObj;
-                    document.getElementById("slot-pants-img").innerHTML = `<img src="${item.foto}" style="width:100%; height:100%; object-fit:contain;">`;
-                    document.getElementById("status-pants").textContent = item.nama;
-                } else {
-                    activeShirtImg = imgObj;
-                    document.getElementById("slot-shirt-img").innerHTML = `<img src="${item.foto}" style="width:100%; height:100%; object-fit:contain;">`;
-                    document.getElementById("status-shirt").textContent = item.nama;
-                }
-
-                // Ekstrak warna dominan
-                imgObj.onload = () => {
-                    const plannerBox = document.getElementById("ai-planner-box");
-                    if (plannerBox) plannerBox.style.display = "block";
-                    
-                    try {
-                        const rgbDominan = colorThief.getColor(imgObj);
-                        const hexDominan = rgbToHex(rgbDominan[0], rgbDominan[1], rgbDominan[2]);
-                        document.getElementById("detected-color-indicator").style.backgroundColor = hexDominan;
-                        document.getElementById("detected-color-name").textContent = hexDominan;
-                        
-                        const listPalet = document.getElementById("recommended-colors-list");
-                        if (listPalet) {
-                            listPalet.innerHTML = "";
-                            const palet = [
-                                { name: "Kontras", hex: rgbToHex(255 - rgbDominan[0], 255 - rgbDominan[1], 255 - rgbDominan[2]) },
-                                { name: "Muted Match", hex: rgbToHex(Math.floor(rgbDominan[0]*0.65), Math.floor(rgbDominan[1]*0.65), Math.floor(rgbDominan[2]*0.65)) },
-                                { name: "Neutral Bright", hex: "#F9F9F9" }
-                            ];
-                            palet.forEach(p => {
-                                listPalet.innerHTML += `
-                                    <div class="palette-unit-block">
-                                        <div class="palette-circle-color" style="background-color: ${p.hex}; border: 1px solid #ddd;"></div>
-                                        <span class="palette-text-label">${p.name}</span>
-                                    </div>`;
-                            });
-                        }
-
-                        panggilGroqAI();
-                    } catch (e) {
-                        console.error("Gagal ekstrak warna: ", e);
+                    if (isBawahan) {
+                        activePantsImg = imgObj;
+                        document.getElementById("slot-pants-img").innerHTML = `<img src="${item.image_url}" style="width:100%; height:100%; object-fit:contain;">`;
+                        document.getElementById("status-pants").textContent = item.name;
+                    } else {
+                        activeShirtImg = imgObj;
+                        document.getElementById("slot-shirt-img").innerHTML = `<img src="${item.image_url}" style="width:100%; height:100%; object-fit:contain;">`;
+                        document.getElementById("status-shirt").textContent = item.name;
                     }
-                };
+
+                    imgObj.onload = () => {
+                        const plannerBox = document.getElementById("ai-planner-box");
+                        if (plannerBox) plannerBox.style.display = "block";
+                        
+                        try {
+                            const rgbDominan = colorThief.getColor(imgObj);
+                            const hexDominan = rgbToHex(rgbDominan[0], rgbDominan[1], rgbDominan[2]);
+                            document.getElementById("detected-color-indicator").style.backgroundColor = hexDominan;
+                            document.getElementById("detected-color-name").textContent = hexDominan;
+                            
+                            const listPalet = document.getElementById("recommended-colors-list");
+                            if (listPalet) {
+                                listPalet.innerHTML = "";
+                                const palet = [
+                                    { name: "Kontras", hex: rgbToHex(255 - rgbDominan[0], 255 - rgbDominan[1], 255 - rgbDominan[2]) },
+                                    { name: "Muted Match", hex: rgbToHex(Math.floor(rgbDominan[0]*0.65), Math.floor(rgbDominan[1]*0.65), Math.floor(rgbDominan[2]*0.65)) },
+                                    { name: "Neutral Bright", hex: "#F9F9F9" }
+                                ];
+                                palet.forEach(p => {
+                                    listPalet.innerHTML += `
+                                        <div class="palette-unit-block">
+                                            <div class="palette-circle-color" style="background-color: ${p.hex}; border: 1px solid #ddd;"></div>
+                                            <span class="palette-text-label">${p.name}</span>
+                                        </div>`;
+                                });
+                            }
+                            
+                            panggilGroqAI();
+                            
+                        } catch (e) {
+                            console.error("Gagal ekstrak warna: ", e);
+                        }
+                    };
+                });
+                containerLemari.appendChild(card);
             });
-            containerLemari.appendChild(card);
-        });
+        } catch (err) {
+            console.error("Gagal mengambil data lemari dari MySQL:", err);
+            containerLemari.innerHTML = `<p class="empty-txt" style="color:red;">Gagal memuat Lemari dari database.</p>`;
+        }
     }
 
-    muatLemari();
-
-    // Kamera AR 
+    // === KAMERA AR POSE ===
     if (typeof Pose !== 'undefined' && video) {
         const pose = new Pose({
             locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
@@ -188,9 +190,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const lebarBahuPixel = Math.abs(bahuKanan.x - bahuKiri.x) * canvasTop.width;
                 const tinggiTorsoPixel = Math.abs(pinggangKiri.y - bahuKiri.y) * canvasTop.height;
 
-                // Render Baju
                 if (activeShirtImg && activeShirtImg.complete) {
-                    const lebarBaju = lebarBahuPixel * 3.0; 
+                    const lebarBaju = lebarBahuPixel * 3.1; 
                     const tinggiBaju = tinggiTorsoPixel * 2.1;
                     const posX = bahuTengahX * canvasTop.width - (lebarBaju / 2);
                     const posY = bahuKiri.y * canvasTop.height - (tinggiBaju * 0.24);
@@ -198,12 +199,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     ctxTop.drawImage(activeShirtImg, posX, posY, lebarBaju, tinggiBaju);
                 }
 
-                // Render Celana
                 if (activePantsImg && activePantsImg.complete) {
-                    const lebarCelana = lebarBahuPixel * 3.3;
+                    const lebarCelana = lebarBahuPixel * 3.1;
                     const tinggiCelana = tinggiTorsoPixel * 2.9;
                     const posX = pinggangTengahX * canvasBottom.width - (lebarCelana / 2);
-                    const posY = pinggangTengahY * canvasBottom.height - (tinggiCelana * 0.16);
+                    const posY = pinggangTengahY * canvasBottom.height - (tinggiCelana * 0.14);
                     
                     ctxBottom.drawImage(activePantsImg, posX, posY, lebarCelana, tinggiCelana);
                 }
@@ -215,7 +215,6 @@ document.addEventListener("DOMContentLoaded", () => {
             width: 640, height: 480
         });
 
-        // Kontrol Sakelar Kamera
         btnToggleCam?.addEventListener("click", () => {
             if (!isCameraOn) {
                 if (cameraLoading) cameraLoading.style.display = "flex";
@@ -240,9 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Ambil Snapshot & Simpan ke Planner
-    btnCaptureFit?.addEventListener("click", () => {
-        if (!isCameraOn) return;
+    // AMBIL JEPRETAN (SIMPAN KE DB)
+    btnCaptureFit?.addEventListener("click", async () => {
+        if (!isCameraOn) {
+            alert("⚠️ Nyalakan kamera terlebih dahulu!");
+            return;
+        }
 
         const shirtText = document.getElementById("status-shirt")?.textContent || "";
         const pantsText = document.getElementById("status-pants")?.textContent || "";
@@ -252,39 +254,68 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const tempCanvas = document.createElement("canvas");
-        tempCanvas.width = video.videoWidth; tempCanvas.height = video.videoHeight;
-        const tempCtx = tempCanvas.getContext("2d");
+        try {
+            const tempCanvas = document.createElement("canvas");
+            tempCanvas.width = video.videoWidth || 640; 
+            tempCanvas.height = video.videoHeight || 480;
+            const tempCtx = tempCanvas.getContext("2d");
 
-        tempCtx.translate(tempCanvas.width, 0);
-        tempCtx.scale(-1, 1);
-        tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
-        tempCtx.setTransform(1, 0, 0, 1, 0, 0);
+            tempCtx.translate(tempCanvas.width, 0);
+            tempCtx.scale(-1, 1);
+            tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.setTransform(1, 0, 0, 1, 0, 0);
 
-        tempCtx.drawImage(canvasBottom, 0, 0);
-        tempCtx.drawImage(canvasTop, 0, 0);
-        const dataGambarOutfit = tempCanvas.toDataURL("image/jpeg");
+            if (canvasBottom) tempCtx.drawImage(canvasBottom, 0, 0, tempCanvas.width, tempCanvas.height);
+            if (canvasTop) tempCtx.drawImage(canvasTop, 0, 0, tempCanvas.width, tempCanvas.height);
+            
+            const dataGambarOutfitRealTime = tempCanvas.toDataURL("image/jpeg", 0.8);
+            const tanggalSekarang = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-        // Simpan kalender
-        let koleksiOutfit = JSON.parse(localStorage.getItem('koleksiOutfit')) || [];
-        koleksiOutfit.push({
-            id: "outfit_" + Date.now(),
-            items: [activeShirtImg.src, activePantsImg.src] 
-        });
-        localStorage.setItem('koleksiOutfit', JSON.stringify(koleksiOutfit));
+            const dataUntukDatabase = {
+                preview_snapshot: dataGambarOutfitRealTime,
+                nama_atasan: shirtText.replace("Atasan: ", "").trim(),
+                nama_bawahan: pantsText.replace("Bawahan: ", "").trim(),
+                tanggal_jepret: tanggalSekarang
+            };
 
-        // Simpan ke histori snapshot
-        let historiPlanner = JSON.parse(localStorage.getItem("pickfit_captured_outfits")) || [];
-        historiPlanner.unshift({
-            id: "fit_" + Date.now(),
-            previewSnapshot: dataGambarOutfit,
-            namaAtasan: shirtText,
-            namaBawahan: pantsText,
-            tanggalJepret: new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
-        });
-        localStorage.setItem("pickfit_captured_outfits", JSON.stringify(historiPlanner));
+            const response = await fetch('http://localhost:3000/api/mixmatch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(dataUntukDatabase)
+            });
 
-        alert("📸 Hasil jepretan kombinasi baju berhasil disimpan! Silakan pilih tanggal pada kalender Planner kamu.");
-        window.location.href = "/planner";
+            const hasilRespon = await response.json();
+
+            if (response.ok) {
+                alert("📸 Sukses! Foto OOTD real-time berhasil disimpan ke database MySQL!");
+                window.location.href = "/planner"; 
+            } else {
+                alert(`❌ Gagal menyimpan: ${hasilRespon.error || "Terjadi masalah pada server."}`);
+            }
+
+        } catch (error) {
+            console.error("Error jepret:", error);
+            alert("❌ Gagal terhubung ke server database port 3000.");
+        }
     });
+
+    // === RESET PILIHAN ===
+    document.getElementById("btn-reset-fit")?.addEventListener("click", () => {
+        activeShirtImg = null;
+        activePantsImg = null;
+        document.getElementById("slot-shirt-img").innerHTML = `<i class="fa-solid fa-shirt"></i>`;
+        document.getElementById("status-shirt").textContent = "Belum memilih atasan";
+        document.getElementById("slot-pants-img").innerHTML = `<i class="fa-solid fa-person-legs-reparations"></i>`;
+        document.getElementById("status-pants").textContent = "Belum memilih bawahan";
+        
+        const plannerBox = document.getElementById("ai-planner-box");
+        if (plannerBox) plannerBox.style.display = "none";
+        
+        document.querySelectorAll(".closet-item-card").forEach(el => el.classList.remove("selected-card"));
+    });
+
+    muatLemari();
 });

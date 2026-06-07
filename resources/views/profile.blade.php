@@ -30,8 +30,12 @@
                         <span>👧</span>
                     </div>
                 </div>
-                <h3 class="signature-hero"> <span id="welcome-msg">...</span>!</h3>
-                <button class="btn-logout" id="logout-btn">Keluar Akun</button>
+                <h3 class="signature-hero">Halo, <span>{{ Auth::user()->name }}</span>!</h3>
+                
+                <form action="{{ route('logout.post') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-logout">Keluar Akun</button>
+                </form>
             </div>
 
             <div class="profile-right">
@@ -40,7 +44,11 @@
                 
                 <div class="profile-info-group">
                     <label>Nama Pengguna</label>
-                    <p id="display-username">Memuat...</p>
+                    <p>{{ Auth::user()->name }}</p>
+                </div>
+                <div class="profile-info-group" style="margin-top: 15px;">
+                    <label>Email Terdaftar</label>
+                    <p>{{ Auth::user()->email }}</p>
                 </div>
             </div>
         </div>

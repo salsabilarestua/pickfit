@@ -15,7 +15,16 @@
             <h2 class="serif">Masuk <span class="brand-color">PickFit</span></h2>
             <p class="auth-subtitle">Welcome Back</p>
             
-            <form id="form-login" action="/?login=true" method="GET">
+            @if($errors->any())
+                <p style="color: red; font-size: 0.9rem;">{{ $errors->first() }}</p>
+            @endif
+
+            @if(session('success'))
+                <p style="color: green; font-size: 0.9rem;">{{ session('success') }}</p>
+            @endif
+
+            <form action="{{ route('login.post') }}" method="POST">
+                @csrf
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="password" name="password" placeholder="Password" required>
                 
