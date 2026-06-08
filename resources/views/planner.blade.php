@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Outfit Planner - PickFit</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -12,10 +13,10 @@
     <nav id="navbar">
         <a href="/" class="logo">Pick<span>Fit</span></a>
         <ul class="nav-links">
-            <li><a href="/">BERANDA</a></li>
-            <li><a href="/lemari">LEMARI</a></li>
-            <li><a href="/mixmatch">MIX & MATCH</a></li>
-            <li><a href="/planner" class="active">PLANNER</a></li>
+            <li><a href="/index.php">BERANDA</a></li>
+            <li><a href="/index.php/lemari">LEMARI</a></li>
+            <li><a href="/index.php/mixmatch">MIX & MATCH</a></li>
+            <li><a href="/index.php/planner" class="active">PLANNER</a></li>
         </ul>
     </nav>
 

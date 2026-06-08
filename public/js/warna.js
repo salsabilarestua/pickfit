@@ -3,7 +3,6 @@ function selectPalette(name) {
     const messageBox = document.getElementById("feedback-message");
     if (!messageBox) return;
 
-    messageBox.textContent = `Palet "${name}" berhasil dipilih untuk outfit kamu!`;
     messageBox.classList.remove("hidden");
 
     setTimeout(() => {

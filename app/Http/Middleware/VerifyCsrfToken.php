@@ -12,6 +12,11 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        '/api/gemini-recommendation',
+        'api/outfits',
+        'api/outfits/*',
+        'api/planner',
+        'api/planner/*',
+        'api/wardrobe',
+        'api/wardrobe/*',
     ];
 }

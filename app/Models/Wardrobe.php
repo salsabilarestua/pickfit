@@ -9,10 +9,13 @@ class Wardrobe extends Model
 {
     use HasFactory;
 
+    protected $table = 'wardrobe';
+
+    public $timestamps = false;
+
     protected $fillable = [
-        'user_id',
-        'nama_baju',
-        'status_baju',
-        'foto_baju'
+        'name',
+        'category',
+        'image_url',
     ];
 }

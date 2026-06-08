@@ -10,7 +10,7 @@
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
-            <a href="/" class="btn-home">&larr; Home</a>
+            <a href="/index.php" class="btn-home">&larr; Home</a>
             
             <h2 class="serif">Masuk <span class="brand-color">PickFit</span></h2>
             <p class="auth-subtitle">Welcome Back</p>
@@ -32,8 +32,8 @@
             </form>
             
             <p class="auth-switch">
-                Belum punya akun? <a href="/daftar">Daftar Yuk</a><br>
-                atau <a href="/lupapassword">Lupa Password?</a>
+                Belum punya akun? <a href="/index.php/daftar">Daftar Yuk</a><br>
+                atau <a href="/index.php/lupapassword">Lupa Password?</a>
             </p>
         </div>
     </div>

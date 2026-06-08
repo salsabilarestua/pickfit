@@ -11,8 +11,6 @@ const months = [
 function inisialisasiKalender() {
     const monthDisplay = document.getElementById("monthDisplay");
     const calendarDays = document.getElementById("calendarDays");
-    const prevMonthBtn = document.getElementById("prevMonth");
-    const nextMonthBtn = document.getElementById("nextMonth");
 
     if (!calendarDays || !monthDisplay) return;
 
@@ -61,8 +59,8 @@ function inisialisasiKalender() {
         }
     }
 
-    prevMonthBtn?.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
-    nextMonthBtn?.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
+    document.getElementById("prevMonth")?.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() - 1); renderCalendar(); });
+    document.getElementById("nextMonth")?.addEventListener("click", () => { currentDate.setMonth(currentDate.getMonth() + 1); renderCalendar(); });
     renderCalendar();
 }
 
@@ -83,8 +81,9 @@ function inisialisasiFiturKoleksi() {
         daftarKoleksi.innerHTML = "<p style='text-align: center; grid-column: 1/-1;'>Mengambil riwayat jepretan Mix & Match...</p>";
 
         try {
-            const response = await fetch('http://localhost:3000/api/mixmatch');
-            if (!response.ok) throw new Error("404 Not Found");
+            // Ambil data langsung dari rute outfits Laravel
+            const response = await fetch('/api/outfits');
+            if (!response.ok) throw new Error("Gagal mengambil data");
             
             const listJepretan = await response.json();
 
@@ -101,12 +100,11 @@ function inisialisasiFiturKoleksi() {
 
             listJepretan.forEach(item => {
                 const itemCard = document.createElement("div");
-                itemCard.style = "background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05);";
+                itemCard.style = "background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); position: relative;";
                 
                 itemCard.innerHTML = `
                     <div style="width: 100%; height: 130px; background: #f8fafc; border-radius: 8px; overflow: hidden; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; position: relative;">
                         <button onclick="event.stopPropagation(); hapusKoleksiOotd(${item.id})" style="position: absolute; top: 5px; right: 5px; background: #fee2e2; color: #dc2626; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; z-index: 999; font-size: 14px; line-height: 0;">&times;</button>
-                        
                         <img src="${item.preview_snapshot}" style="width: 100%; height: 100%; object-fit: contain;">
                     </div>
                     <p style="font-size: 13px; font-weight: bold; margin: 4px 0; color: #1e293b;">👕 ${item.nama_atasan}</p>
@@ -114,14 +112,16 @@ function inisialisasiFiturKoleksi() {
                 `;
 
                 itemCard.addEventListener("click", () => {
-                    jepretanTerpilih = item;
-                    outfitPreview.innerHTML = `
-                        <div style="text-align: center; width: 100%;">
-                            <img src="${item.preview_snapshot}" style="max-width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 5px;">
-                            <h4 style="margin: 0; font-size: 13px; color: #0f172a;">Kombinasi Terpilih</h4>
-                            <p style="margin: 2px 0; font-size: 11px; color: #475569;">${item.nama_atasan} & ${item.nama_bawahan}</p>
-                        </div>
-                    `;
+                    jepretanTerpilih = item; // Menyimpan data item pakaian yang dipilih ke variabel global
+                    if (outfitPreview) {
+                        outfitPreview.innerHTML = `
+                            <div style="text-align: center; width: 100%;">
+                                <img src="${item.preview_snapshot}" style="max-width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 5px;">
+                                <h4 style="margin: 0; font-size: 13px; color: #0f172a;">Kombinasi Terpilih</h4>
+                                <p style="margin: 2px 0; font-size: 11px; color: #475569;">${item.nama_atasan} & ${item.nama_bawahan}</p>
+                            </div>
+                        `;
+                    }
                     tutupModal();
                 });
 
@@ -140,9 +140,10 @@ window.tutupModal = function() {
     if (modalKoleksi) modalKoleksi.style.display = "none";
 }
 
-//  SIMPAN JADWAL (KIRIM KE DB)
+// SIMPAN JADWAL (KIRIM KE LARAVEL PLANNER)
 function inisialisasiTombolSimpan() {
-    const savePlannerBtn = document.getElementById("savePlannerBtn");
+    const savePlannerBtn = document.getElementById("savePlannerBtn") || document.querySelector('.btn-success') || document.querySelectorAll('button')[2]; 
+    
     savePlannerBtn?.addEventListener("click", async () => {
         if (!selectedDateString || !jepretanTerpilih) {
             alert("⚠️ Lengkapi pilihan tanggal dan jepretan koleksi terlebih dahulu!");
@@ -150,10 +151,20 @@ function inisialisasiTombolSimpan() {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/planner', {
+            const tokenCsrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            // Kirim ke API Laravel untuk disimpan sebagai rencana kalender
+            const response = await fetch('/api/planner', {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ idJepretan: jepretanTerpilih.id, tanggalRencana: selectedDateString })
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": tokenCsrf
+                },
+                body: JSON.stringify({ 
+                    outfit_id: jepretanTerpilih.id, 
+                    tanggal_rencana: selectedDateString 
+                })
             });
 
             if (response.ok) {
@@ -161,9 +172,13 @@ function inisialisasiTombolSimpan() {
                 muatRiwayatRencana();
                 document.getElementById("outfitPreview").innerHTML = `<p style="color: #ccc; font-size: 0.85rem;">Klik tanggal untuk melihat jadwal</p>`;
                 jepretanTerpilih = null;
+            } else {
+                const errData = await response.json();
+                alert(`❌ Gagal menyimpan jadwal: ${errData.error || 'Ada masalah pada server.'}`);
             }
         } catch (error) {
             console.error(error);
+            alert("❌ Gagal terhubung ke server kalender.");
         }
     });
 }
@@ -174,7 +189,7 @@ async function muatRiwayatRencana() {
     if (!listHistoryOotd) return;
 
     try {
-        const response = await fetch('http://localhost:3000/api/planner');
+        const response = await fetch('/api/planner');
         if (!response.ok) return;
         const daftarRencana = await response.json();
 
@@ -194,8 +209,8 @@ async function muatRiwayatRencana() {
                     <img src="${item.preview_snapshot}" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
                 <span style="font-size: 11px; color: #a1824a; font-weight: bold; display: block; margin-bottom: 4px;">📅 ${item.tanggal_rencana}</span>
-                <h4 style="margin: 0; font-size: 14px; color: #0f172a;">${item.nama_atasan}</h4>
-                <p style="margin: 0; font-size: 12px; color: #64748b;">${item.nama_bawahan}</p>
+                <h4 style="margin: 0; font-size: 14px; color: #0f172a;">${item.nama_atasan || 'Atasan'}</h4>
+                <p style="margin: 0; font-size: 12px; color: #64748b;">${item.nama_bawahan || 'Bawahan'}</p>
             `;
             listHistoryOotd.appendChild(card);
         });
@@ -204,22 +219,37 @@ async function muatRiwayatRencana() {
     }
 }
 
-//  HAPUS JADWAL 
+// HAPUS JADWAL KALENDER
 window.hapusJadwalOotd = async function(id) {
     if (confirm("Hapus jadwal OOTD ini?")) {
         try {
-            const response = await fetch(`http://localhost:3000/api/planner/${id}`, { method: "DELETE" });
+            const tokenCsrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const response = await fetch(`/api/planner/${id}`, { 
+                method: "DELETE",
+                headers: { "X-CSRF-TOKEN": tokenCsrf }
+            });
             if (response.ok) { muatRiwayatRencana(); }
         } catch (error) { console.error(error); }
     }
 }
 
+// HAPUS KOLEKSI UTAMA DARI DB
 window.hapusKoleksiOotd = async function(id) {
     if (confirm("Yakin ingin menghapus koleksi OOTD ini secara permanen?")) {
         try {
-            const response = await fetch(`http://localhost:3000/api/koleksi/${id}`, { method: "DELETE" });
+            const tokenCsrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            
+            const response = await fetch(`/api/outfits/${id}`, { 
+                method: "DELETE",
+                headers: { "X-CSRF-TOKEN": tokenCsrf }
+            });
+            
             if (response.ok) {
-                document.getElementById("addOutfitBtn").click();
+                alert("🗑️ Koleksi berhasil dihapus dari database!");
+                const addOutfitBtn = document.getElementById("addOutfitBtn");
+                addOutfitBtn?.click();
+            } else {
+                alert("❌ Gagal menghapus koleksi dari server.");
             }
         } catch (error) { 
             console.error("Gagal menghapus koleksi:", error); 

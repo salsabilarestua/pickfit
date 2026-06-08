@@ -15,23 +15,23 @@
         <div class="nav-container" id="nav-list">
             <ul class="nav-links">
                 <li><a href="/" class="active">BERANDA</a></li>
-                <li><a href="/lemari">LEMARI</a></li>
-                <li><a href="/mixmatch">MIX & MATCH</a></li>
-                <li><a href="/planner">PLANNER</a></li>
+                <a href="/index.php/lemari">LEMARI</a>
+                <a href="/index.php/mix-match">MIX & MATCH</a>
+                <a href="/index.php/planner">PLANNER</a>
             </ul>
 
             {{-- JIKA PENGGUNA BELUM LOGIN --}}
             @guest
                 <div id="guest-menu">
-                    <a href="/masuk" class="btn-link">Masuk</a>
-                    <a href="/daftar" class="btn-black">DAFTAR</a>
+                    <a href="/index.php/masuk" class="btn-link">Masuk</a>
+                    <a href="/index.php/daftar" class="btn-black">DAFTAR</a>
                 </div>
             @endguest
 
             {{-- JIKA PENGGUNA SUDAH LOGIN KE DATABASE --}}
             @auth
                 <div id="user-menu">
-                    <a href="/profil" class="btn-black">PROFIL</a>
+                    <a href="/index.php/profil" class="btn-black">PROFIL</a>
                     <form action="{{ route('logout.post') }}" method="POST" style="display: inline;">
                         @csrf
                         <button type="submit" class="btn-link" style="border:none; background:none; cursor:pointer;">Keluar</button>
@@ -45,7 +45,7 @@
         <div class="hero-content">
             <span class="signature-hero">Pick Your Outfit Easily</span> 
             <h1>Tentukan Gaya Terbaikmu</h1>
-            <button class="btn-nude" onclick="location.href='/lemari'">MULAI SEKARANG</button>
+            <button class="btn-nude" onclick="location.href='/index.php/lemari'">MULAI SEKARANG</button>
         </div>
     </header>
 
@@ -63,21 +63,21 @@
                 <div class="overlay-center">
                     <p class="signature-light">Inspirasi</p>
                     <h2 class="cat-brand">PICKFIT</h2>
-                    <a href="/kategori" class="btn-see-all" style="text-decoration: none;">Lihat Semua</a>
+                    <a href="/index.php/kategori" class="btn-see-all" style="text-decoration: none;">Lihat Semua</a>
                 </div>
             </div>
 
-            <div class="category-item" onclick="location.href='/kategori'" style="cursor: pointer;">
+            <div class="category-item" onclick="location.href='/index.php/kategori'" style="cursor: pointer;">
                 <img src="{{ asset('images/casual.avif') }}" alt="Harian">
                 <div class="overlay"><h3>Gaya Harian</h3></div>
             </div>
 
-            <div class="category-item" onclick="location.href='/kategori'" style="cursor: pointer;">
+            <div class="category-item" onclick="location.href='/index.php/kategori'" style="cursor: pointer;">
                 <img src="{{ asset('images/wedding.jpg') }}" alt="Wedding">
                 <div class="overlay"><h3>Wedding Invite</h3></div>
             </div>
 
-            <div class="category-item" onclick="location.href='/kategori'" style="cursor: pointer;">
+            <div class="category-item" onclick="location.href='/index.php/kategori'" style="cursor: pointer;">
                 <img src="{{ asset('images/date.jpg') }}" alt="Date">
                 <div class="overlay"><h3>Date Night</h3></div>
             </div>
@@ -132,7 +132,7 @@
         </div>
 
         <div class="color-action-center">
-            <a href="/warna" class="btn-explore-color">Lihat Detail Palet</a>
+            <a href="/index.php/warna" class="btn-explore-color">Lihat Detail Palet</a>
         </div>
     </section>
 

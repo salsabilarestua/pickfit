@@ -1,18 +1,33 @@
 import express from 'express';
 import cors from 'cors';
 import mysql from 'mysql2';
+import 'dotenv/config'; 
+import path from 'path'; 
+import { fileURLToPath } from 'url'; 
 
+const __filename = fileURLToPath(import.meta.url); 
+const __dirname = path.dirname(__filename); 
+
+const express = require('express');
 const app = express();
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.use(cors());
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
+app.use(express.static(path.join(__dirname, 'public'))); 
+
+// KONEKSI DATABASE OTOMATIS: Kunci utama nembak addon Clever Cloud secara internal
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'pickfit'
+    host: process.env.MYSQL_ADDON_HOST || 'localhost',
+    user: process.env.MYSQL_ADDON_USER || 'root',
+    password: process.env.MYSQL_ADDON_PASSWORD || '',
+    database: process.env.MYSQL_ADDON_DB || 'pickfit',
+    port: process.env.MYSQL_ADDON_PORT || 3306
 });
 
 db.connect((err) => {
@@ -23,8 +38,16 @@ db.connect((err) => {
     console.log('Database PickFit Terhubung!');
 });
 
-// === ENDPOINT WARDROBE ===
-app.get('/api/wardrobe', (req, res) => {
+// Jalankan port 8085 (Port wajib untuk trik .htaccess di server PHP)
+const PORT = process.env.PORT || 8085;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server Backend PickFit berjalan di port ${PORT}`);
+});
+
+// ==========================================
+// === ENDPOINT WARDROBE (FIX SINKRON) ===
+// ==========================================
+app.get('/node-api/wardrobe', (req, res) => {
     const query = "SELECT * FROM wardrobe";
     db.query(query, (err, results) => {
         if (err) {
@@ -35,8 +58,88 @@ app.get('/api/wardrobe', (req, res) => {
     });
 });
 
+app.post('/node-api/wardrobe', (req, res) => {
+    const { name, category, image_url } = req.body;
+    if (!name || !image_url) {
+        return res.status(400).json({ error: "Nama dan Gambar wajib diisi!" });
+    }
+    const user_id = 1; 
+    const query = "INSERT INTO wardrobe (user_id, name, category, image_url) VALUES (?, ?, ?, ?)";
+    db.query(query, [user_id, name, category || 'Atasan', image_url], (err, result) => {
+        if (err) {
+            console.error("Gagal menyimpan pakaian ke database:", err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.status(201).json({ message: "Berhasil disimpan!", id: result.insertId });
+    });
+});
+
+app.delete('/node-api/wardrobe/:id', (req, res) => {
+    const { id } = req.params;
+    const query = "DELETE FROM wardrobe WHERE id = ?";
+    db.query(query, [id], (err, result) => {
+        if (err) {
+            console.error("Gagal menghapus baju di DB Node:", err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.json({ message: "Pakaian berhasil dihapus dari database!" });
+    });
+});
+
+// ===========================================
+// === ENDPOINT MIX & MATCH (SUDAH RAPI) ===
+// ===========================================
+app.post('/node-api/mixmatch', (req, res) => {
+    const { preview_snapshot, nama_atasan, nama_bawahan, tanggal_jepret } = req.body;
+    const query = "INSERT INTO planner (preview_snapshot, nama_atasan, nama_bawahan, tanggal_jepret, tanggal_rencana) VALUES (?, ?, ?, ?, NULL)";
+    db.query(query, [preview_snapshot, nama_atasan, nama_bawahan, tanggal_jepret], (err, result) => {
+        if (err) {
+            console.error("Gagal menyimpan jepretan ke DB:", err);
+            return res.status(500).json({ error: "Gagal menyimpan jepretan" });
+        }
+        res.status(201).json({ message: "Jepretan kombinasi sukses disimpan!", id: result.insertId });
+    });
+});
+
+app.get('/node-api/mixmatch', (req, res) => {
+    const query = "SELECT * FROM planner WHERE tanggal_rencana IS NULL ORDER BY id DESC";
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+// ======================================
+// === ENDPOINT PLANNER (SUDAH RAPI) ===
+// ======================================
+app.post('/node-api/planner', (req, res) => {
+    const { idJepretan, tanggalRencana } = req.body;
+    const query = "UPDATE planner SET tanggal_rencana = ? WHERE id = ?";
+    db.query(query, [tanggalRencana, idJepretan], (err, result) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.status(200).json({ message: "Jadwal OOTD berhasil disimpan ke kalender!" });
+    });
+});
+
+app.get('/node-api/planner', (req, res) => {
+    const query = "SELECT * FROM planner WHERE tanggal_rencana IS NOT NULL ORDER BY id DESC";
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+app.delete('/node-api/planner/:id', (req, res) => {
+    const { id } = req.params;
+    const query = "UPDATE planner SET tanggal_rencana = NULL WHERE id = ?";
+    db.query(query, [id], (err, result) => {
+        if (err) return res.status(500).json({ error: "Gagal membatalkan jadwal" });
+        res.json({ message: "Jadwal berhasil dihapus!" });
+    });
+});
+
 // === ENDPOINT MIX & MATCH ===
-app.post('/api/mixmatch', (req, res) => {
+app.post('/node-api/mixmatch', (req, res) => { ... });{
     const { preview_snapshot, nama_atasan, nama_bawahan, tanggal_jepret } = req.body;
     const query = "INSERT INTO planner (preview_snapshot, nama_atasan, nama_bawahan, tanggal_jepret, tanggal_rencana) VALUES (?, ?, ?, ?, NULL)";
     
@@ -49,7 +152,7 @@ app.post('/api/mixmatch', (req, res) => {
     });
 });
 
-app.get('/api/mixmatch', (req, res) => {
+app.get('/node-api/mixmatch', (req, res) => { ... }); {
     const query = "SELECT * FROM planner WHERE tanggal_rencana IS NULL ORDER BY id DESC";
     db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -58,7 +161,7 @@ app.get('/api/mixmatch', (req, res) => {
 });
 
 // === ENDPOINT PLANNER ===
-app.post('/api/planner', (req, res) => {
+app.post('/node-api/planner', (req, res) => { ... }); {
     const { idJepretan, tanggalRencana } = req.body;
     const query = "UPDATE planner SET tanggal_rencana = ? WHERE id = ?";
     
@@ -68,7 +171,7 @@ app.post('/api/planner', (req, res) => {
     });
 });
 
-app.get('/api/planner', (req, res) => {
+app.get('/node-api/planner', (req, res) => { ... }); {
     const query = "SELECT * FROM planner WHERE tanggal_rencana IS NOT NULL ORDER BY id DESC";
     db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -76,7 +179,7 @@ app.get('/api/planner', (req, res) => {
     });
 });
 
-app.delete('/api/planner/:id', (req, res) => {
+app.delete(('/node-api/planner/:id', (req, res) => { ... }); {
     const { id } = req.params;
     const query = "UPDATE planner SET tanggal_rencana = NULL WHERE id = ?";
     db.query(query, [id], (err, result) => {
@@ -85,12 +188,7 @@ app.delete('/api/planner/:id', (req, res) => {
     });
 });
 
-
-app.listen(3000, () => {
-    console.log('Server Backend PickFit berjalan di http://localhost:3000');
-});
-
-// RUTE REGISTRASI USER BARU
+// === RUTE REGISTRASI USER BARU ===
 app.post('/api/auth/register', (req, res) => {
     const { name, email, password } = req.body;
     
@@ -110,7 +208,7 @@ app.post('/api/auth/register', (req, res) => {
     });
 });
 
-// RUTE LOGIN USER
+// === RUTE LOGIN USER ===
 app.post('/api/auth/login', (req, res) => {
     const { email, password } = req.body;
 
@@ -136,7 +234,7 @@ app.post('/api/auth/login', (req, res) => {
     });
 });
 
-app.delete('/api/koleksi/:id', (req, res) => {
+app.delete('/node-api/koleksi/:id', (req, res) => {
     const { id } = req.params;
     const query = "DELETE FROM planner WHERE id = ?";
     db.query(query, [id], (err, result) => {

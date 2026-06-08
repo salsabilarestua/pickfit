@@ -10,7 +10,7 @@
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
-            <a href="/" class="btn-home">&larr; Home</a>
+            <a href="/index.php" class="btn-home">&larr; Home</a>
             
             <h2 class="serif">Lupa <span class="brand-color">Password?</span></h2>
             <p class="auth-subtitle">Masukkan Email Pemulihan</p>
@@ -23,7 +23,7 @@
             </form>
             
             <p class="auth-switch">
-                Belum punya akun? <a href="/daftar">Daftar Disini</a>
+                Belum punya akun? <a href="/index.php/daftar">Daftar Disini</a>
             </p>
         </div>
     </div>

@@ -10,7 +10,7 @@
 <body>
     <div class="auth-wrapper"> 
         <div class="auth-card"> 
-            <a href="/" class="btn-home">&larr; Home</a>
+            <a href="/index.php" class="btn-home">&larr; Home</a>
 
             <h2 class="serif" style="margin-top: 15px;">Daftar <span class="brand-color">PickFit</span></h2>
             
@@ -23,7 +23,7 @@
                 
                 <button type="submit" class="btn-black">DAFTAR SEKARANG</button>
 
-                <p style="margin-top:20px; font-size:0.8rem;">Sudah punya akun? <a href="/masuk">Masuk Disini</a></p>
+                <p style="margin-top:20px; font-size:0.8rem;">Sudah punya akun? <a href="/index.php/masuk">Masuk Disini</a></p>
             </form>
         </div>
     </div>

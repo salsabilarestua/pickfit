@@ -71,13 +71,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // MUAT DATA LEMARI 
+    // MUAT DATA LEMARI
     async function muatLemari() {
         if (!containerLemari) return;
         containerLemari.innerHTML = "";
         
         try {
-            const response = await fetch('http://localhost:3000/api/wardrobe');
+            const response = await fetch('/api/wardrobe');
             const koleksi = await response.json();
 
             if (koleksi.length === 0) {
@@ -121,8 +121,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         try {
                             const rgbDominan = colorThief.getColor(imgObj);
                             const hexDominan = rgbToHex(rgbDominan[0], rgbDominan[1], rgbDominan[2]);
-                            document.getElementById("detected-color-indicator").style.backgroundColor = hexDominan;
-                            document.getElementById("detected-color-name").textContent = hexDominan;
+                            
+                            const indicator = document.getElementById("detected-color-indicator");
+                            const nameText = document.getElementById("detected-color-name");
+                            if (indicator) indicator.style.backgroundColor = hexDominan;
+                            if (nameText) nameText.textContent = hexDominan;
                             
                             const listPalet = document.getElementById("recommended-colors-list");
                             if (listPalet) {
@@ -151,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 containerLemari.appendChild(card);
             });
         } catch (err) {
-            console.error("Gagal mengambil data lemari dari MySQL:", err);
+            console.error("Gagal mengambil data lemari dari database:", err);
             containerLemari.innerHTML = `<p class="empty-txt" style="color:red;">Gagal memuat Lemari dari database.</p>`;
         }
     }
@@ -239,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // AMBIL JEPRETAN (SIMPAN KE DB)
+    // AMBIL JEPRETAN (PAS DENGAN KONTROLLER LARAVEL /api/outfits)
     btnCaptureFit?.addEventListener("click", async () => {
         if (!isCameraOn) {
             alert("⚠️ Nyalakan kamera terlebih dahulu!");
@@ -278,11 +281,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 tanggal_jepret: tanggalSekarang
             };
 
-            const response = await fetch('http://localhost:3000/api/mixmatch', {
+            const tokenCsrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            const response = await fetch('/api/outfits', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': tokenCsrf
                 },
                 body: JSON.stringify(dataUntukDatabase)
             });
@@ -290,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const hasilRespon = await response.json();
 
             if (response.ok) {
-                alert("📸 Sukses! Foto OOTD real-time berhasil disimpan ke database MySQL!");
+                alert("📸 Sukses! Foto OOTD real-time berhasil disimpan!");
                 window.location.href = "/planner"; 
             } else {
                 alert(`❌ Gagal menyimpan: ${hasilRespon.error || "Terjadi masalah pada server."}`);
@@ -298,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (error) {
             console.error("Error jepret:", error);
-            alert("❌ Gagal terhubung ke server database port 3000.");
+            alert("❌ Gagal terhubung ke server database.");
         }
     });
 

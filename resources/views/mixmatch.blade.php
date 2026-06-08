@@ -20,10 +20,10 @@
         </div>
         <div class="nav-container" id="nav-container">
             <ul class="nav-links">
-                <li><a href="/">BERANDA</a></li>
-                <li><a href="/lemari">LEMARI</a></li>
-                <li><a href="/mixmatch" class="active">MIX & MATCH</a></li>
-                <li><a href="/planner">PLANNER</a></li>
+                <li><a href="/index.php">BERANDA</a></li>
+                <li><a href="/index.php/lemari">LEMARI</a></li>
+                <li><a href="/index.php/mixmatch" class="active">MIX & MATCH</a></li>
+                <li><a href="/index.php/planner">PLANNER</a></li>
             </ul>
         </div>
     </nav>

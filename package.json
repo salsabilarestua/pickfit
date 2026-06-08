@@ -5,6 +5,7 @@
     "dev": "vite",
     "build": "vite build",
     "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev-all": "concurrently \"php artisan serve\" \"node server.js\""
   },
   "devDependencies": {
@@ -16,7 +17,9 @@
   "dependencies": {
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "ftp-deploy": "^2.4.7",
     "mysql2": "^3.22.5"
   },
   "name": "pickfit"
